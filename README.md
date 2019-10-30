@@ -1,16 +1,30 @@
-# connectron
+# Connectron
+A simple 4 in a row style game
 
-Connect 4 style game
+The game has features including:
+- Simple Material UI
+- Large Customization e.g board size, line length etc.
+- 1 player move that analyses future moves
+- No ads!
 
-## Getting Started
+Permissions:
+- NONE
 
-This project is a starting point for a Flutter application.
+### Download
+| [![Play Store](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=uk.co.ariesfamily.connectron) | [![Github](https://github.githubassets.com/pinned-octocat.svg)]() |
+| :---: | :---: |
+| Flutter Version (1.0+) | Github (1.0+) |
 
-A few resources to get you started if this is your first Flutter project:
+### Contribute
+You can contribute to this project in many ways:
+* Browse the [issues](https://github.com/Robert3141/Connectron/issues), [comment on proposals](https://github.com/Robert3141/Connectron/pulls), [report bugs](https://github.com/Robert3141/Connectron/issues/new?template=bug_report.md), [request new features](https://github.com/Robert3141/Connectron/issues/new?template=feature_request.md) or [add to the wiki](https://github.com/Robert3141/Connectron/wiki).
+* Help to maintain and keep this app active.
+* The source code will not compile release versions because you need to put your signing key details in a new file: ``android/key.properties``
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Showcase
+| [N/A]() | ![]() | ![]() |
+| :---: | :---: | :---: |
+| ![]() | ![]() | ![]() |
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Developer
+[Robert3141](https://github.com/Robert3141)
