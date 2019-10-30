@@ -11,7 +11,7 @@ Permissions:
 - NONE
 
 ### Download
-| [![Play Store](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=uk.co.ariesfamily.connectron) | [![Github](https://github.githubassets.com/pinned-octocat.svg)]() |
+| [![Play Store](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=uk.co.ariesfamily.connectron) | [![Github](https://github.githubassets.com/pinned-octocat.svg)](https://github.com/Robert3141/Connectron/releases) |
 | :---: | :---: |
 | Flutter Version (1.0+) | Github (1.0+) |
 
