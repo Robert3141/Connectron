@@ -130,7 +130,7 @@ class _GamePageState extends State<GamePage> {
     globals.amountOfPlayers = players;
   }
 
-  void nextPlayer() async {
+  nextPlayer() async {
     //increment player
     globals.playerNumber++;
     if (globals.playerNumber > globals.amountOfPlayers) {
@@ -142,10 +142,11 @@ class _GamePageState extends State<GamePage> {
       //all players played
       globals.playerNumber = 1;
     }
-
+    //end running
+    globals.running = false;
   }
 
-  void nextRound(int winnerNumber) {
+  void nextRound(int winnerNumber) async {
     //local vars
     int overallWinner = 1;
 
@@ -173,9 +174,11 @@ class _GamePageState extends State<GamePage> {
       globals.mainBoard = new List<List<int>>.generate(globals.boardSize, (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerNumber = 1;
     }
+    //end running
+    globals.running = false;
   }
 
-  void onColumnPressed(int columnNumber) {
+  void onColumnPressed(int columnNumber) async {
     try {
       //prevents additional input (usually whilst computer playing)
       if (!globals.running) {
@@ -190,14 +193,13 @@ class _GamePageState extends State<GamePage> {
           });
           winner = logic.checkWinner(globals.mainBoard, globals.boardSize);
           if (winner == 0 && spaceOnBoard()){
-            nextPlayer();
+            await nextPlayer();
           } else {
             nextRound(winner);
           }
         } else {
           msgBox(globals.errorTitleInput, globals.errorMsgBoardNoSpace, false);
         }
-        globals.running = false;
       }
     } catch(e) {
       msgBox("Error", e.toString(), false);
