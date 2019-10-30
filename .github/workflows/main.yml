@@ -1,0 +1,13 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dart/Flutter Package Analyzer
+        uses: axel-op/dart_package_analyzer@v1.0.0
+
