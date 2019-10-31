@@ -191,16 +191,16 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
             columnScores[y] = await minMax(n - 1, newBoard, boardSize, false);
           } else {
             //not playable. Give penalty
-            columnScores[y] = -2 * (n) * boardSize;
+            columnScores[y] = -1 * (n) * boardSize - 1;
           }
           break;
         case 1:
         //loss
-          score = -2 * (n) * boardSize;
+          score = -1 * (n) * boardSize - 1;
           break;
         case 2:
         //win
-          score = 2 * (n) * boardSize;
+          score = 1 * (n) * boardSize + 1;
           break;
       }
     }
