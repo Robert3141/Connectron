@@ -1,6 +1,7 @@
 import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:Connectron/logic.dart' as logic;
@@ -111,8 +112,14 @@ class _GamePageState extends State<GamePage> {
     int columnChosen = 0;
 
     //choose column
+    //Web doesn't support isolates
     //run in isolate to stop main thread being cluttered so UI can still update
-    columnChosen = await isolateMinMax();
+    if (!kIsWeb)  {
+      columnChosen = await isolateMinMax();
+    } else {
+      columnChosen = await logic.minMax(globals.recursionLimit, globals.mainBoard, globals.boardSize, true);
+    }
+
 
     //run procedures
     if (addCounter(columnChosen)) {
