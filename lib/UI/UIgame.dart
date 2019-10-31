@@ -206,6 +206,7 @@ class _GamePageState extends State<GamePage> {
           }
         } else {
           msgBox(globals.errorTitleInput, globals.errorMsgBoardNoSpace, false);
+          globals.running = false;
         }
       }
     } catch(e) {
