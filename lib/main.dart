@@ -20,6 +20,11 @@ class MyApp extends StatelessWidget {
         return new MaterialApp(
           title: globals.titleGame,
           theme: theme,
+          darkTheme: new ThemeData(
+            primarySwatch: Colors.red,
+            primaryColor: globals.playerColors[1],
+            brightness: Brightness.dark,
+          ),
           home: SettingsPage(title: globals.titleSettings),
         );
       },
