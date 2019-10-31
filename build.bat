@@ -1,6 +1,1 @@
-flutter build appbundle
-echo BUILD APP-BUNDLE DONE
-flutter build apk
-echo BUILD APK DONE
-flutter build web
-echo BUILD WEB DONE
+flutter build appbundle && echo - && echo APP BUNDLE BUILD DONE && echo - && flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi && echo - && echo APK BUILD DONE && echo - && flutter build web && echo - && echo WEB BUILD DONE && echo - &&
