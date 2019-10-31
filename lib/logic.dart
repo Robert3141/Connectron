@@ -15,7 +15,7 @@ int checkHor(List<List<int>> board, int boardSize) {
     //check every y
     for (int y = 0; y < boardSize; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = 0; x <= boardSize - globals.lineLength - 1; x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -42,7 +42,7 @@ int checkVer(List<List<int>> board, int boardSize) {
     //check every x
     for (int x = 0; x < boardSize; x++) {
       //check for every y
-      for (int y = 0; y <= boardSize - globals.lineLength; y++) {
+      for (int y = 0; y <= boardSize - globals.lineLength - 1; y++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -67,9 +67,9 @@ int checkDiRight(List<List<int>> board, int boardSize) {
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
     //check every y
-    for (int y = 0; y <= boardSize - globals.lineLength; y++) {
+    for (int y = 0; y <= boardSize - globals.lineLength - 1; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = 0; x <= boardSize - globals.lineLength - 1; x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -94,9 +94,9 @@ int checkDiLeft(List<List<int>> board, int boardSize) {
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
     //check every y
-    for (int y = globals.lineLength; y < boardSize; y++) {
+    for (int y = globals.lineLength - 1; y < boardSize; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = 0; x <= boardSize - globals.lineLength - 1; x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
