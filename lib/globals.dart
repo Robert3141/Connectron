@@ -1,6 +1,7 @@
 library connectron.globals;
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 
 ///
@@ -15,8 +16,8 @@ const String titleGame = "Connectron";
 const int boardMin = 3;
 const int boardDefault = 7;
 const int boardMax = 100;
-const int playerMin = 1;
-const int playerDefault = 1;
+const int playerMin = kIsWeb ? 2 : 1;
+const int playerDefault = kIsWeb ? 2 : 1;
 const int playerMax = 10;
 const int lineMin = 3;
 const int lineDefault = 4;

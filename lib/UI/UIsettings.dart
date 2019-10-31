@@ -1,6 +1,7 @@
 //import 'dart:html';
 import 'package:Connectron/UI/UIgame.dart';
 import 'package:Connectron/globals.dart' as globals;
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -160,6 +161,7 @@ class _SettingsState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
+          IconButton(icon: Icon(Icons.brightness_3),onPressed: (){DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark? Brightness.light: Brightness.dark);},),
           IconButton(icon: Icon(Icons.help),onPressed: (){msgBox(globals.errorTitleHelp,globals.errorMsgHelpMain);},)
         ],
       ),
