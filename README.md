@@ -22,9 +22,9 @@ You can contribute to this project in many ways:
 * The source code will not compile release versions because you need to put your signing key details in a new file: ``android/key.properties``
 
 ### Showcase
-| [N/A]() | ![]() | ![]() |
+| ![](https://lh3.googleusercontent.com/EtYtgBwYQyuf8ppcpsZlEtYE_9EWBJttvKvkQ5FmFDAoCLOqBnxga7R6DCyziA2GaTk1=w1366-h636) | ![](https://lh3.googleusercontent.com/VcrxzhBC0No0t33UuBiwAvoc2Aymx9_EtBN7bIjpqsG_Ve6fsNka2Qf01LGaOCU0a6Y=w1366-h636) | ![](https://lh3.googleusercontent.com/wxjXfrSu2r5C6ip3DVOCCSpKGN5gOxai26XwWuddN_ZW6fPEb--OfwjaH0a2gtSYvA=w1366-h636) |
 | :---: | :---: | :---: |
-| ![]() | ![]() | ![]() |
+| ![](https://lh3.googleusercontent.com/LJ0806dmsYnTf0LTS6gdPncikgl-tLJMUVzrACsmeeKDxMWOlTPygisdfBA0JMljEfQ=w1366-h636) | ![](https://lh3.googleusercontent.com/uXfpzX9VAuI-H_fJPjmOKLJJZBlglAS3wxT6vxI7Lz5sOQyZbik4buu8NK3ZGKZd_G0=w1366-h636) | ![](https://lh3.googleusercontent.com/8aLTYKDonIv_Zo-ovdnJTFZmbXcqKorxoR2Ymt5Ja_s-Tcl7-82sqYIG--YsgUzEXns=w1366-h636) |
 
 ### Developer
 [Robert3141](https://github.com/Robert3141)
