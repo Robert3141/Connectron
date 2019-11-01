@@ -1,8 +1,6 @@
 library connectron.globals;
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-
 
 ///
 /// STRINGS
