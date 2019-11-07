@@ -26,6 +26,19 @@ const int roundMax = 5;
 const int recursionMin = 1;
 const int recursionDefault = 5;
 const int recursionMax = 7;
+const List<List<int>> optionalPresetsValues = [
+  //FORMAT board player lineLength, roundAmount, recursionVal
+  [boardDefault,playerDefault],
+  [11,2],
+  [15,3],
+  [boardDefault,playerDefault],
+];
+const List<String> optionalPresetsTitles = [
+  "1 Player",
+  "2 Player",
+  "3 Player",
+  "Custom"
+];
 const String lblBoardSize = "Board Size ($boardMin-$boardMax)";
 const String lblAmountOfPlayers = "Amount of players ($playerMin-$playerMax)";
 const String lblLineLength = "Line Length ($lineMin-$lineMax)";
@@ -49,6 +62,12 @@ const String errorTitleHelp = "Help";
 const String errorMsgHelpMain = "Connectron is a Connect 4 style game played by $playerMin-$playerMax.";
 const String errorMsgHelpGame = "To play press a spot on the chosen column. The background colour represents the player playing. A win for white represents a draw";
 const double defaultPadding = 12.0;
+TextEditingController conBoardSize = TextEditingController();
+TextEditingController conAmountOfPlayers = TextEditingController();
+TextEditingController conLineLength = TextEditingController();
+TextEditingController conNumberOfRounds = TextEditingController();
+TextEditingController conRecursion = TextEditingController();
+
 
 
 //Games Page
@@ -84,6 +103,7 @@ const List<String> playerNames = [
   "lime",
   "cyan",
 ];
+int selectedPreset = 0;
 bool running = false;
 int boardSize = boardDefault;
 int amountOfPlayers = playerDefault;

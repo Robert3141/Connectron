@@ -105,12 +105,31 @@ class _SettingsState extends State<SettingsPage> {
     });
   }
 
+  void onLblPresetsPressed(String selectedString) {
+    setState(() {
+      //set preset selected
+      for (int i = 0; i < globals.optionalPresetsTitles.length; i++) {
+        if (selectedString == globals.optionalPresetsTitles[i]) {
+          globals.selectedPreset = i;
+          break;
+        }
+      }
+      //set new values
+      globals.boardSize = globals.optionalPresetsValues[globals.selectedPreset][0];
+      globals.conBoardSize.text = globals.boardSize.toString();
+      globals.amountOfPlayers = globals.optionalPresetsValues[globals.selectedPreset][1];
+      globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
+    });
+  }
+
   void onLblBoardSizePressed(String boardSizeString) {
+    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.boardSize = int.parse(boardSizeString) ?? globals.boardDefault;
     globals.boardSize = globals.boardSize == 0 ? globals.boardDefault : globals.boardSize;
   }
 
   void onLblPlayerAmountPressed(String playerAmountString) {
+    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.amountOfPlayers = int.parse(playerAmountString) ?? globals.playerDefault;
     globals.amountOfPlayers = globals.amountOfPlayers == 0 ? globals.playerDefault : globals.amountOfPlayers;
     //enable recursion
@@ -120,16 +139,19 @@ class _SettingsState extends State<SettingsPage> {
   }
 
   void onLblLineLengthPressed(String lineLengthString) {
+    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.lineLength = int.parse(lineLengthString) ?? globals.lineDefault;
     globals.lineLength = globals.lineLength == 0 ? globals.lineDefault : globals.lineLength;
   }
 
   void onLblRoundAmountPressed(String roundAmountString) {
+    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.amountOfRounds = int.parse(roundAmountString) ?? globals.roundDefault;
     globals.amountOfRounds = globals.amountOfRounds == 0 ? globals.roundDefault : globals.amountOfRounds;
   }
 
   void onLblRecursionPressed(String recursionString) {
+    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.recursionLimit = int.parse(recursionString) ?? globals.recursionDefault;
     globals.recursionLimit = globals.recursionLimit == 0 ? globals.recursionDefault : globals.recursionLimit;
   }
@@ -172,6 +194,21 @@ class _SettingsState extends State<SettingsPage> {
           children: <Widget>[
             InkWell(
               splashColor: Theme.of(context).primaryColor,
+              child: DropdownButton<String>(
+                value:globals.optionalPresetsTitles[globals.selectedPreset],
+                items:globals.optionalPresetsTitles.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                icon: Icon(Icons.arrow_downward),
+                onChanged: onLblPresetsPressed,
+                underline: Container(height: 2,color:Theme.of(context).primaryColor),
+              ),
+            ),
+            InkWell(
+              splashColor: Theme.of(context).primaryColor,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -183,6 +220,7 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: globals.conBoardSize,
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
                       onChanged: onLblBoardSizePressed,
@@ -210,6 +248,7 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: globals.conAmountOfPlayers,
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
                       onChanged: onLblPlayerAmountPressed,
@@ -238,6 +277,7 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: globals.conLineLength,
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
                       onChanged: onLblLineLengthPressed,
@@ -266,6 +306,7 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: globals.conNumberOfRounds,
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
                       onChanged: onLblRoundAmountPressed,
@@ -295,6 +336,7 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: globals.conRecursion,
                       enabled: globals.recursionEnabled,
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
