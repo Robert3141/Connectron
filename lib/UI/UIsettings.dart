@@ -93,6 +93,7 @@ class _SettingsState extends State<SettingsPage> {
     setState(() {
       showDialog<String>(
         context: context,
+        barrierDismissible: true,
         builder: (BuildContext context) => AlertDialog(
           title: Text(messageTitle),
           content: Text(message),
