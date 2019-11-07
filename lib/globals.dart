@@ -11,9 +11,9 @@ const String titleSettings = "Set up";
 const String titleGame = "Connectron";
 
 //Settings Page
-const int boardMin = 3;
+const int boardMin = 6;
 const int boardDefault = 7;
-const int boardMax = 100;
+const int boardMax = 47;
 const int playerMin = 1;
 const int playerDefault = 1;
 const int playerMax = 10;
@@ -24,8 +24,8 @@ const int roundMin = 1;
 const int roundDefault = 1;
 const int roundMax = 5;
 const int recursionMin = 1;
-const int recursionDefault = 3;
-const int recursionMax = 10;
+const int recursionDefault = 5;
+const int recursionMax = 7;
 const String lblBoardSize = "Board Size ($boardMin-$boardMax)";
 const String lblAmountOfPlayers = "Amount of players ($playerMin-$playerMax)";
 const String lblLineLength = "Line Length ($lineMin-$lineMax)";
