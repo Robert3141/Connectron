@@ -115,12 +115,14 @@ class _SettingsState extends State<SettingsPage> {
         }
       }
       //set new values
-      globals.boardSize = globals.optionalPresetsValues[globals.selectedPreset][0];
-      globals.conBoardSize.text = globals.boardSize.toString();
-      globals.amountOfPlayers = globals.optionalPresetsValues[globals.selectedPreset][1];
-      globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
-      globals.recursionEnabled = globals.amountOfPlayers > 1;
-      globals.bombCounter = globals.amountOfPlayers <= 1 ? false : globals.bombCounter;
+      if (globals.selectedPreset != globals.optionalPresetsTitles.length-1){
+        globals.boardSize = globals.optionalPresetsValues[globals.selectedPreset][0];
+        globals.conBoardSize.text = globals.boardSize.toString();
+        globals.amountOfPlayers = globals.optionalPresetsValues[globals.selectedPreset][1];
+        globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
+        globals.recursionEnabled = globals.amountOfPlayers > 1;
+        globals.bombCounter = globals.amountOfPlayers <= 1 ? false : globals.bombCounter;
+      }
     });
   }
 
