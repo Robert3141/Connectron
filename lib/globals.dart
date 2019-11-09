@@ -13,7 +13,7 @@ const String titleGame = "Connectron";
 //Settings Page
 const int boardMin = 6;
 const int boardDefault = 7;
-const int boardMax = 47;
+const int boardMax = 20;
 const int playerMin = 1;
 const int playerDefault = 1;
 const int playerMax = 10;
@@ -31,14 +31,17 @@ const List<List<int>> optionalPresetsValues = [
   [boardDefault,playerDefault],
   [11,2],
   [15,3],
+  [19,4],
   [boardDefault,playerDefault],
 ];
 const List<String> optionalPresetsTitles = [
   "1 Player",
   "2 Player",
   "3 Player",
+  "4 Player",
   "Custom"
 ];
+const String lblOptionalPrests = "Presets";
 const String lblBoardSize = "Board Size ($boardMin-$boardMax)";
 const String lblAmountOfPlayers = "Amount of players ($playerMin-$playerMax)";
 const String lblLineLength = "Line Length ($lineMin-$lineMax)";

@@ -194,17 +194,32 @@ class _SettingsState extends State<SettingsPage> {
           children: <Widget>[
             InkWell(
               splashColor: Theme.of(context).primaryColor,
-              child: DropdownButton<String>(
-                value:globals.optionalPresetsTitles[globals.selectedPreset],
-                items:globals.optionalPresetsTitles.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                icon: Icon(Icons.arrow_downward),
-                onChanged: onLblPresetsPressed,
-                underline: Container(height: 2,color:Theme.of(context).primaryColor),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      globals.lblOptionalPrests,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: DropdownButton<String>(
+                        value:globals.optionalPresetsTitles[globals.selectedPreset],
+                        items:globals.optionalPresetsTitles.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value, textAlign: TextAlign.center,),
+                          );
+                        }).toList(),
+                        icon: Icon(Icons.arrow_downward),
+                        onChanged: onLblPresetsPressed,
+                        underline: Container(height: 2,color:Theme.of(context).primaryColor),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             InkWell(
