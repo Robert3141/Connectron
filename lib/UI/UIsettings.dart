@@ -119,6 +119,16 @@ class _SettingsState extends State<SettingsPage> {
       globals.conBoardSize.text = globals.boardSize.toString();
       globals.amountOfPlayers = globals.optionalPresetsValues[globals.selectedPreset][1];
       globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
+      globals.recursionEnabled = globals.amountOfPlayers > 1;
+      globals.bombCounter = globals.amountOfPlayers <= 1 ? false : globals.bombCounter;
+    });
+  }
+
+  void onLblBombPressed(bool newBomb) {
+    setState(() {
+      if (globals.recursionEnabled) {
+        globals.bombCounter = newBomb;
+      }
     });
   }
 
@@ -132,6 +142,7 @@ class _SettingsState extends State<SettingsPage> {
     globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.amountOfPlayers = int.parse(playerAmountString) ?? globals.playerDefault;
     globals.amountOfPlayers = globals.amountOfPlayers == 0 ? globals.playerDefault : globals.amountOfPlayers;
+    globals.bombCounter = globals.amountOfPlayers <= 1 ? false : globals.bombCounter;
     //enable recursion
     setState(() {
       globals.recursionEnabled = globals.amountOfPlayers < 2;
@@ -204,7 +215,8 @@ class _SettingsState extends State<SettingsPage> {
                     ),
                   ),
                   Expanded(
-                    child: Center(
+                    child: Align(
+                      alignment: AlignmentDirectional.center,
                       child: DropdownButton<String>(
                         value:globals.optionalPresetsTitles[globals.selectedPreset],
                         items:globals.optionalPresetsTitles.map<DropdownMenuItem<String>>((String value) {
@@ -222,6 +234,38 @@ class _SettingsState extends State<SettingsPage> {
                 ],
               ),
             ),
+            Divider(),
+            InkWell(
+              enableFeedback: globals.recursionEnabled,
+              splashColor: Theme.of(context).primaryColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      globals.lblBombCounter,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: AlignmentDirectional.center,
+                      child: InkWell(
+                        onTap: (){
+                          onLblBombPressed(!globals.bombCounter);
+                        },
+                        child: Switch(
+                          value: globals.bombCounter,
+                          onChanged: onLblBombPressed,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+            Divider(),
             InkWell(
               splashColor: Theme.of(context).primaryColor,
               child: Row(

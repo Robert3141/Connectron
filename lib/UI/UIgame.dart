@@ -232,38 +232,77 @@ class _GamePageState extends State<GamePage> {
       ),
       body: Container(
         alignment: Alignment.center,
-        child: ListView.builder(
+        child: ListView(
           shrinkWrap: true,
-          padding: EdgeInsets.all(globals.defaultPadding),
-          itemCount: globals.boardSize,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (BuildContext context, int boardY){
-            //Horizontal Board
-            return Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: globals.defaultPadding/globals.boardSize,bottom: globals.defaultPadding/globals.boardSize),
-              height: (MediaQuery.of(context).size.width - globals.defaultPadding) / (globals.boardSize + 1),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: globals.boardSize,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int boardX) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: globals.defaultPadding/globals.boardSize,right: globals.defaultPadding/globals.boardSize),
-                    child: CircleAvatar(
-                      backgroundColor: globals.playerColors[globals.mainBoard[boardX][boardY]],
-                      radius: (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1),
-                      child: InkWell(
-                        onTap: () {
-                          onColumnPressed(boardX);
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
+          children: <Widget>[
+            //MAIN GRID
+            ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(globals.defaultPadding),
+              itemCount: globals.bombCounter ? globals.boardSize+2 : globals.boardSize+1,//For extra counters
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int boardY){
+                //Horizontal Board
+                return Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: globals.defaultPadding/globals.boardSize,bottom: globals.defaultPadding/globals.boardSize),
+                  height: (MediaQuery.of(context).size.width - globals.defaultPadding) / (globals.boardSize + 1),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: globals.boardSize,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int boardX) {
+                      if (boardY == 0){
+                        //Downward arrow
+                        return Padding(
+                          padding: EdgeInsets.only(left: globals.defaultPadding/globals.boardSize,right: globals.defaultPadding/globals.boardSize),
+                          child: CircleAvatar(
+                            backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(globals.backgroundAlpha),
+                            radius: (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1),
+                            child: InkWell(
+                              child: Icon(Icons.arrow_downward),
+                              onTap: (){
+                                onColumnPressed(boardX);
+                              },
+                            ),
+                          ),
+                        );
+                      } else if (boardY == globals.boardSize+1) {
+                        //Bomb counter
+                        return Padding(
+                          padding: EdgeInsets.only(left: globals.defaultPadding/globals.boardSize,right: globals.defaultPadding/globals.boardSize),
+                          child: CircleAvatar(
+                            backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(globals.backgroundAlpha),
+                            radius: (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1),
+                            child: InkWell(
+                              child: Icon(Icons.flare),
+                              onTap: (){
+                                onColumnPressed(boardX);
+                              },
+                            ),
+                          ),
+                        );
+                      } else {
+                        //board
+                        return Padding(
+                          padding: EdgeInsets.only(left: globals.defaultPadding/globals.boardSize,right: globals.defaultPadding/globals.boardSize),
+                          child: CircleAvatar(
+                            backgroundColor: globals.playerColors[globals.mainBoard[boardX][boardY-1]],
+                            radius: (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1),
+                            child: InkWell(
+                              onTap: () {
+                                onColumnPressed(boardX);
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
