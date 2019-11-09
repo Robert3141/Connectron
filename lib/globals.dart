@@ -11,9 +11,9 @@ const String titleSettings = "Set up";
 const String titleGame = "Connectron";
 
 //Settings Page
-const int boardMin = 3;
+const int boardMin = 6;
 const int boardDefault = 7;
-const int boardMax = 100;
+const int boardMax = 20;
 const int playerMin = 1;
 const int playerDefault = 1;
 const int playerMax = 10;
@@ -24,8 +24,24 @@ const int roundMin = 1;
 const int roundDefault = 1;
 const int roundMax = 5;
 const int recursionMin = 1;
-const int recursionDefault = 3;
-const int recursionMax = 10;
+const int recursionDefault = 5;
+const int recursionMax = 7;
+const List<List<int>> optionalPresetsValues = [
+  //FORMAT board player lineLength, roundAmount, recursionVal
+  [boardDefault,playerDefault],
+  [11,2],
+  [15,3],
+  [19,4],
+  [boardDefault,playerDefault],
+];
+const List<String> optionalPresetsTitles = [
+  "1 Player",
+  "2 Player",
+  "3 Player",
+  "4 Player",
+  "Custom"
+];
+const String lblOptionalPrests = "Presets";
 const String lblBoardSize = "Board Size ($boardMin-$boardMax)";
 const String lblAmountOfPlayers = "Amount of players ($playerMin-$playerMax)";
 const String lblLineLength = "Line Length ($lineMin-$lineMax)";
@@ -49,6 +65,12 @@ const String errorTitleHelp = "Help";
 const String errorMsgHelpMain = "Connectron is a Connect 4 style game played by $playerMin-$playerMax.";
 const String errorMsgHelpGame = "To play press a spot on the chosen column. The background colour represents the player playing. A win for white represents a draw";
 const double defaultPadding = 12.0;
+TextEditingController conBoardSize = TextEditingController();
+TextEditingController conAmountOfPlayers = TextEditingController();
+TextEditingController conLineLength = TextEditingController();
+TextEditingController conNumberOfRounds = TextEditingController();
+TextEditingController conRecursion = TextEditingController();
+
 
 
 //Games Page
@@ -84,6 +106,7 @@ const List<String> playerNames = [
   "lime",
   "cyan",
 ];
+int selectedPreset = 0;
 bool running = false;
 int boardSize = boardDefault;
 int amountOfPlayers = playerDefault;
