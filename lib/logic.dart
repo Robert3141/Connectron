@@ -2,6 +2,8 @@ library connectron.logic;
 import 'package:Connectron/globals.dart' as globals;
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 int randomNumber(int min, int max) {
   final random = new Random();
   return min + random.nextInt(max-min);
@@ -145,6 +147,55 @@ List<List<int>> applyGravity(List<List<int>> board, int boardSize) {
     }
   }
   return board;
+}
+
+List<List<int>> bombRemoval(int x, int y, List<List<int>> movedBoard) {
+  if (x>0) {
+    if (y>0) {
+      movedBoard[x-1][y-1] = 0;
+    }
+    if(y<globals.boardSize-1) {
+      movedBoard[x-1][y+1] = 0;
+    }
+    movedBoard[x-1][y] = 0;
+  }
+  if (x<globals.boardSize-1) {
+    if (y>0) {
+      movedBoard[x+1][y-1] = 0;
+    }
+    if(y<globals.boardSize-1) {
+      movedBoard[x+1][y+1] = 0;
+    }
+    movedBoard[x+1][y] = 0;
+  }
+  if (y<globals.boardSize-1) {
+    movedBoard[x][y+1] = 0;
+  }
+  movedBoard[x][y] = 0;
+
+  return movedBoard;
+}
+
+List<List<int>> playBomb(int x, List<List<int>> movedBoard) {
+  //apply gravity for bomb
+  for (int y = 0; y < globals.boardSize-1; y++) {
+    //dropdown until
+    if (movedBoard[x][y+1] == 0) {
+      //drop down below
+      movedBoard[x][y+1] = movedBoard[x][y];
+      movedBoard[x][y] = 0;
+    } else {
+      //y is bomb counter
+      print("x=$x;y=$y");
+
+      //bomb
+      return applyGravity(bombRemoval(x, y, movedBoard), globals.boardSize);
+      //exit for loop
+      break;
+    }
+  }
+
+  return applyGravity(bombRemoval(x, globals.boardSize-1, movedBoard), globals.boardSize);
 }
 
 List<List<int>> playMove(List<List<int>> board, int boardSize, int player, int columnNumber) {

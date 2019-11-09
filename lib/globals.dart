@@ -47,6 +47,7 @@ const String lblAmountOfPlayers = "Amount of players ($playerMin-$playerMax)";
 const String lblLineLength = "Line Length ($lineMin-$lineMax)";
 const String lblRoundNum = "Number of rounds ($roundMin-$roundMax)";
 const String lblRecursion = "CPU Level ($recursionMin-$recursionMax)";
+const String lblBombCounter = "Use bomb counter";
 const String lblRunGame = "Run Game";
 const String errorActionAccept = "OK";
 const String errorTitleInput = "Invalid Input";
@@ -80,6 +81,7 @@ const errorTitleWin = "Winner!";
 const errorMsgWinner = "The winner is player ";
 const errorMsgOverall = " and the overall winner is player ";
 const errorMsgBoardNoSpace = "The column you selected is full!";
+const lblOptions = "Options";
 const List<Color> playerColors = [
   Color.fromRGBO(255,255,255,1.0),  //00 WHITE
   Color.fromRGBO(198, 40, 40,1.0),  //01 RED
@@ -114,7 +116,9 @@ int amountOfRounds = roundDefault;
 int lineLength = lineDefault;
 int recursionLimit = recursionDefault;
 bool recursionEnabled = true;
+bool bombCounter = false;
 int roundNumber = roundDefault;
 int playerNumber = playerDefault;
+List<bool> playerBombs = new List<bool>.generate(playerDefault, (i) => true);
 List<List<int>> mainBoard = new List<List<int>>.generate(boardDefault, (i) => List<int>.generate(boardDefault, (j) => 0));
 List<int> playerScores = new List<int>.generate(playerDefault, (i) => 0);
