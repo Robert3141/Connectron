@@ -186,7 +186,7 @@ class _GamePageState extends State<GamePage> {
     globals.running = false;
   }
 
-  void onColumnPressed(int columnNumber) async {
+  void onColumnPressed(int columnNumber, bool bombPlayed) async {
     try {
       //prevents additional input (usually whilst computer playing)
       if (!globals.running) {
@@ -197,7 +197,12 @@ class _GamePageState extends State<GamePage> {
         //run procedures
         if (addCounter(columnNumber)) {
           setState(() {
-            globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize);
+            if (bombPlayed) {
+              globals.mainBoard = logic.playBomb(columnNumber, globals.mainBoard);
+            } else {
+              globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize);
+            }
+
           });
           winner = logic.checkWinner(globals.mainBoard, globals.boardSize);
           if (winner == 0 && spaceOnBoard()){
@@ -262,7 +267,7 @@ class _GamePageState extends State<GamePage> {
                             child: InkWell(
                               child: Icon(Icons.arrow_downward),
                               onTap: (){
-                                onColumnPressed(boardX);
+                                onColumnPressed(boardX,false);
                               },
                             ),
                           ),
@@ -277,7 +282,7 @@ class _GamePageState extends State<GamePage> {
                             child: InkWell(
                               child: Icon(Icons.flare),
                               onTap: (){
-                                onColumnPressed(boardX);
+                                onColumnPressed(boardX,true);
                               },
                             ),
                           ),
@@ -291,7 +296,7 @@ class _GamePageState extends State<GamePage> {
                             radius: (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1),
                             child: InkWell(
                               onTap: () {
-                                onColumnPressed(boardX);
+                                onColumnPressed(boardX,false);
                               },
                             ),
                           ),
