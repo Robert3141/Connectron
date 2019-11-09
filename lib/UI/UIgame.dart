@@ -198,6 +198,7 @@ class _GamePageState extends State<GamePage> {
         if (addCounter(columnNumber)) {
           setState(() {
             if (bombPlayed) {
+              globals.playerBombs[globals.playerNumber-1] = false;
               globals.mainBoard = logic.playBomb(columnNumber, globals.mainBoard);
             } else {
               globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize);
@@ -244,7 +245,7 @@ class _GamePageState extends State<GamePage> {
             ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.all(globals.defaultPadding),
-              itemCount: globals.bombCounter ? globals.boardSize+2 : globals.boardSize+1,//For extra counters
+              itemCount: globals.bombCounter ? globals.playerBombs[globals.playerNumber-1] ? globals.boardSize+2 : globals.boardSize+1 : globals.boardSize+1,//For extra counters
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int boardY){
                 //Horizontal Board

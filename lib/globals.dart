@@ -119,5 +119,6 @@ bool recursionEnabled = true;
 bool bombCounter = false;
 int roundNumber = roundDefault;
 int playerNumber = playerDefault;
+List<bool> playerBombs = new List<bool>.generate(playerDefault, (i) => true);
 List<List<int>> mainBoard = new List<List<int>>.generate(boardDefault, (i) => List<int>.generate(boardDefault, (j) => 0));
 List<int> playerScores = new List<int>.generate(playerDefault, (i) => 0);

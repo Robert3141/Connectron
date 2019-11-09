@@ -174,6 +174,7 @@ class _SettingsState extends State<SettingsPage> {
     //no issues
     if (!issue) {
       //reset variables
+      globals.playerBombs = new List<bool>.generate(globals.amountOfPlayers, (i) => true);
       globals.mainBoard = new List<List<int>>.generate(globals.boardSize, (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerScores = globals.amountOfPlayers <= 1 ? new List<int>.generate(2, (i) => 0) : new List<int>.generate(globals.amountOfPlayers, (i) => 0);
       globals.playerNumber = 1;
