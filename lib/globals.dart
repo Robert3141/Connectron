@@ -71,8 +71,6 @@ TextEditingController conLineLength = TextEditingController();
 TextEditingController conNumberOfRounds = TextEditingController();
 TextEditingController conRecursion = TextEditingController();
 
-
-
 //Games Page
 const double btnSize = 1.0;
 const int backgroundAlpha = 200;

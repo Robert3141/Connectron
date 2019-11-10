@@ -2,6 +2,7 @@
 import 'package:Connectron/UI/UIgame.dart';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -129,14 +130,16 @@ class _SettingsState extends State<SettingsPage> {
   }
 
   void onLblBombPressed(bool newBomb) {
-    setState(() {
-      if (!globals.recursionEnabled) {
+    msgBox(newBomb.toString(), globals.recursionEnabled.toString() + "|" + globals.bombCounter.toString());
+    if (!globals.recursionEnabled) {
+      setState(() {
         globals.bombCounter = newBomb;
-        //msgBox("Test", "test");
-      } else {
+      });
+    } else {
+      setState(() {
         globals.bombCounter = false;
-      }
-    });
+      });
+    }
   }
 
   void onLblBoardSizePressed(String boardSizeString) {
@@ -189,7 +192,11 @@ class _SettingsState extends State<SettingsPage> {
     //no issues
     if (!issue) {
       //reset variables
-      globals.playerBombs = new List<bool>.generate(globals.amountOfPlayers, (i) => true);
+      if (globals.amountOfPlayers > 1) {
+        globals.playerBombs = new List<bool>.generate(globals.amountOfPlayers, (i) => true);
+      } else {
+        globals.bombCounter = false;
+      }
       globals.mainBoard = new List<List<int>>.generate(globals.boardSize, (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerScores = globals.amountOfPlayers <= 1 ? new List<int>.generate(2, (i) => 0) : new List<int>.generate(globals.amountOfPlayers, (i) => 0);
       globals.playerNumber = 1;
