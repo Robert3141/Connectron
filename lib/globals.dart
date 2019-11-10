@@ -29,10 +29,9 @@ const int recursionMax = 7;
 const List<List<int>> optionalPresetsValues = [
   //FORMAT board player lineLength, roundAmount, recursionVal
   [boardDefault,playerDefault],
-  [11,2],
-  [15,3],
-  [19,4],
-  [boardDefault,playerDefault],
+  [7,2],
+  [11,3],
+  [15,4],
 ];
 const List<String> optionalPresetsTitles = [
   "1 Player",
@@ -71,8 +70,6 @@ TextEditingController conAmountOfPlayers = TextEditingController();
 TextEditingController conLineLength = TextEditingController();
 TextEditingController conNumberOfRounds = TextEditingController();
 TextEditingController conRecursion = TextEditingController();
-
-
 
 //Games Page
 const double btnSize = 1.0;

@@ -2,6 +2,7 @@
 import 'package:Connectron/UI/UIgame.dart';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -115,56 +116,73 @@ class _SettingsState extends State<SettingsPage> {
         }
       }
       //set new values
-      globals.boardSize = globals.optionalPresetsValues[globals.selectedPreset][0];
-      globals.conBoardSize.text = globals.boardSize.toString();
-      globals.amountOfPlayers = globals.optionalPresetsValues[globals.selectedPreset][1];
-      globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
-      globals.recursionEnabled = globals.amountOfPlayers > 1;
-      globals.bombCounter = globals.amountOfPlayers <= 1 ? false : globals.bombCounter;
-    });
-  }
-
-  void onLblBombPressed(bool newBomb) {
-    setState(() {
-      if (globals.recursionEnabled) {
-        globals.bombCounter = newBomb;
+      if (globals.selectedPreset != globals.optionalPresetsTitles.length-1){
+        globals.boardSize = globals.optionalPresetsValues[globals.selectedPreset][0];
+        globals.amountOfPlayers = globals.optionalPresetsValues[globals.selectedPreset][1];
+        setState(() {
+          globals.conBoardSize.text = globals.boardSize.toString();
+          globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
+          globals.recursionEnabled = globals.amountOfPlayers <= 1;
+          globals.bombCounter = globals.recursionEnabled ? false : globals.bombCounter;
+        });
       }
     });
   }
 
+  void onLblBombPressed(bool newBomb) {
+    msgBox(newBomb.toString(), globals.recursionEnabled.toString() + "|" + globals.bombCounter.toString());
+    if (!globals.recursionEnabled) {
+      setState(() {
+        globals.bombCounter = newBomb;
+      });
+    } else {
+      setState(() {
+        globals.bombCounter = false;
+      });
+    }
+  }
+
   void onLblBoardSizePressed(String boardSizeString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.boardSize = int.parse(boardSizeString) ?? globals.boardDefault;
     globals.boardSize = globals.boardSize == 0 ? globals.boardDefault : globals.boardSize;
+    setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+    });
   }
 
   void onLblPlayerAmountPressed(String playerAmountString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.amountOfPlayers = int.parse(playerAmountString) ?? globals.playerDefault;
     globals.amountOfPlayers = globals.amountOfPlayers == 0 ? globals.playerDefault : globals.amountOfPlayers;
-    globals.bombCounter = globals.amountOfPlayers <= 1 ? false : globals.bombCounter;
     //enable recursion
     setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
       globals.recursionEnabled = globals.amountOfPlayers < 2;
+      globals.bombCounter = globals.recursionEnabled ? false : globals.bombCounter;
     });
   }
 
   void onLblLineLengthPressed(String lineLengthString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.lineLength = int.parse(lineLengthString) ?? globals.lineDefault;
     globals.lineLength = globals.lineLength == 0 ? globals.lineDefault : globals.lineLength;
+    setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+    });
   }
 
   void onLblRoundAmountPressed(String roundAmountString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.amountOfRounds = int.parse(roundAmountString) ?? globals.roundDefault;
     globals.amountOfRounds = globals.amountOfRounds == 0 ? globals.roundDefault : globals.amountOfRounds;
+    setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+    });
   }
 
   void onLblRecursionPressed(String recursionString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.recursionLimit = int.parse(recursionString) ?? globals.recursionDefault;
     globals.recursionLimit = globals.recursionLimit == 0 ? globals.recursionDefault : globals.recursionLimit;
+    setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+    });
   }
 
   void onBtnRunGamePressed(){
@@ -174,7 +192,11 @@ class _SettingsState extends State<SettingsPage> {
     //no issues
     if (!issue) {
       //reset variables
-      globals.playerBombs = new List<bool>.generate(globals.amountOfPlayers, (i) => true);
+      if (globals.amountOfPlayers > 1) {
+        globals.playerBombs = new List<bool>.generate(globals.amountOfPlayers, (i) => true);
+      } else {
+        globals.bombCounter = false;
+      }
       globals.mainBoard = new List<List<int>>.generate(globals.boardSize, (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerScores = globals.amountOfPlayers <= 1 ? new List<int>.generate(2, (i) => 0) : new List<int>.generate(globals.amountOfPlayers, (i) => 0);
       globals.playerNumber = 1;
