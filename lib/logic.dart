@@ -135,15 +135,13 @@ int checkWinner(List<List<int>> board, int boardSize) {
   return winnerFound;
 }
 
-List<List<int>> applyGravity(List<List<int>> board, int boardSize) {
+List<List<int>> applyGravity(List<List<int>> board, int boardSize, int x) {
   //loop through entire array except bottom line
-  for (int x = 0; x < boardSize; x++) {
-    for (int y = 0; y < boardSize - 1; y++) {
-      //if below is empty then drop down and replace
-      if (board[x][y+1] == 0) {
-        board[x][y+1] = board[x][y];
-        board[x][y] = 0;
-      }
+  for (int y = 0; y < boardSize - 1; y++) {
+    //if below is empty then drop down and replace
+    if (board[x][y+1] == 0) {
+      board[x][y+1] = board[x][y];
+      board[x][y] = 0;
     }
   }
   return board;
@@ -189,13 +187,27 @@ List<List<int>> playBomb(int x, List<List<int>> movedBoard) {
       print("x=$x;y=$y");
 
       //bomb
-      return applyGravity(bombRemoval(x, y, movedBoard), globals.boardSize);
-      //exit for loop
-      break;
+      movedBoard = bombRemoval(x, y, movedBoard);
+      movedBoard = applyGravity(movedBoard, globals.boardSize, x);
+      if (x > 0) {
+        movedBoard = applyGravity(movedBoard, globals.boardSize, x-1);
+      }
+      if (x < globals.boardSize-1) {
+        movedBoard = applyGravity(movedBoard, globals.boardSize, x+1);
+      }
+      return movedBoard;
     }
   }
 
-  return applyGravity(bombRemoval(x, globals.boardSize-1, movedBoard), globals.boardSize);
+  movedBoard = bombRemoval(x, globals.boardSize-1, movedBoard);
+  movedBoard = applyGravity(movedBoard, globals.boardSize, x);
+  if (x > 0) {
+    movedBoard = applyGravity(movedBoard, globals.boardSize, x-1);
+  }
+  if (x < globals.boardSize-1) {
+    movedBoard = applyGravity(movedBoard, globals.boardSize, x+1);
+  }
+  return movedBoard;
 }
 
 List<List<int>> playMove(List<List<int>> board, int boardSize, int player, int columnNumber) {
@@ -204,7 +216,7 @@ List<List<int>> playMove(List<List<int>> board, int boardSize, int player, int c
 
   board[columnNumber][0] = counterAdded ? player : board[columnNumber][0];
   //msgBox(counterAdded.toString(), board[columnNumber][0].toString(), false);
-  board = applyGravity(board, boardSize);
+  board = applyGravity(board, boardSize, columnNumber);
   return board;
 }
 

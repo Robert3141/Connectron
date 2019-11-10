@@ -117,56 +117,69 @@ class _SettingsState extends State<SettingsPage> {
       //set new values
       if (globals.selectedPreset != globals.optionalPresetsTitles.length-1){
         globals.boardSize = globals.optionalPresetsValues[globals.selectedPreset][0];
-        globals.conBoardSize.text = globals.boardSize.toString();
         globals.amountOfPlayers = globals.optionalPresetsValues[globals.selectedPreset][1];
-        globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
-        globals.recursionEnabled = globals.amountOfPlayers > 1;
-        globals.bombCounter = globals.amountOfPlayers <= 1 ? false : globals.bombCounter;
+        setState(() {
+          globals.conBoardSize.text = globals.boardSize.toString();
+          globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
+          globals.recursionEnabled = globals.amountOfPlayers <= 1;
+          globals.bombCounter = globals.recursionEnabled ? false : globals.bombCounter;
+        });
       }
     });
   }
 
   void onLblBombPressed(bool newBomb) {
     setState(() {
-      if (globals.recursionEnabled) {
+      if (!globals.recursionEnabled) {
         globals.bombCounter = newBomb;
+        //msgBox("Test", "test");
+      } else {
+        globals.bombCounter = false;
       }
     });
   }
 
   void onLblBoardSizePressed(String boardSizeString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.boardSize = int.parse(boardSizeString) ?? globals.boardDefault;
     globals.boardSize = globals.boardSize == 0 ? globals.boardDefault : globals.boardSize;
+    setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+    });
   }
 
   void onLblPlayerAmountPressed(String playerAmountString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.amountOfPlayers = int.parse(playerAmountString) ?? globals.playerDefault;
     globals.amountOfPlayers = globals.amountOfPlayers == 0 ? globals.playerDefault : globals.amountOfPlayers;
-    globals.bombCounter = globals.amountOfPlayers <= 1 ? false : globals.bombCounter;
     //enable recursion
     setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
       globals.recursionEnabled = globals.amountOfPlayers < 2;
+      globals.bombCounter = globals.recursionEnabled ? false : globals.bombCounter;
     });
   }
 
   void onLblLineLengthPressed(String lineLengthString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.lineLength = int.parse(lineLengthString) ?? globals.lineDefault;
     globals.lineLength = globals.lineLength == 0 ? globals.lineDefault : globals.lineLength;
+    setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+    });
   }
 
   void onLblRoundAmountPressed(String roundAmountString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.amountOfRounds = int.parse(roundAmountString) ?? globals.roundDefault;
     globals.amountOfRounds = globals.amountOfRounds == 0 ? globals.roundDefault : globals.amountOfRounds;
+    setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+    });
   }
 
   void onLblRecursionPressed(String recursionString) {
-    globals.selectedPreset = globals.optionalPresetsTitles.length-1;
     globals.recursionLimit = int.parse(recursionString) ?? globals.recursionDefault;
     globals.recursionLimit = globals.recursionLimit == 0 ? globals.recursionDefault : globals.recursionLimit;
+    setState(() {
+      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+    });
   }
 
   void onBtnRunGamePressed(){

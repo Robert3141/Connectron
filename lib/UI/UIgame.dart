@@ -125,7 +125,7 @@ class _GamePageState extends State<GamePage> {
     //run procedures
     if (addCounter(columnChosen)) {
       setState(() {
-        globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize);
+        globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize, columnChosen);
       });
       //temp increase amount of players
       winner = logic.checkWinner(globals.mainBoard,globals.boardSize);
@@ -201,7 +201,7 @@ class _GamePageState extends State<GamePage> {
               globals.playerBombs[globals.playerNumber-1] = false;
               globals.mainBoard = logic.playBomb(columnNumber, globals.mainBoard);
             } else {
-              globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize);
+              globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize, columnNumber);
             }
 
           });
@@ -227,6 +227,10 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
+    //local variables of size
+    double _paddingInsets = globals.defaultPadding/globals.boardSize;
+    double _counterSize = (MediaQuery.of(context).size.width - globals.defaultPadding) / (globals.boardSize + 1);
+    double _counterRadius = (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1);
 
     return Scaffold(
       backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(globals.backgroundAlpha),
@@ -245,14 +249,14 @@ class _GamePageState extends State<GamePage> {
             ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.all(globals.defaultPadding),
-              itemCount: globals.bombCounter ? globals.playerBombs[globals.playerNumber-1] ? globals.boardSize+2 : globals.boardSize+1 : globals.boardSize+1,//For extra counters
+              itemCount: globals.bombCounter ? globals.boardSize+2 : globals.boardSize+1,//For extra counters
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int boardY){
                 //Horizontal Board
                 return Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: globals.defaultPadding/globals.boardSize,bottom: globals.defaultPadding/globals.boardSize),
-                  height: (MediaQuery.of(context).size.width - globals.defaultPadding) / (globals.boardSize + 1),
+                  padding: EdgeInsets.only(top: _paddingInsets,bottom: _paddingInsets),
+                  height: _counterSize,
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: globals.boardSize,
@@ -261,12 +265,13 @@ class _GamePageState extends State<GamePage> {
                       if (boardY == 0){
                         //Downward arrow
                         return Padding(
-                          padding: EdgeInsets.only(left: globals.defaultPadding/globals.boardSize,right: globals.defaultPadding/globals.boardSize),
+                          padding: EdgeInsets.only(left: _paddingInsets,right: _paddingInsets),
                           child: CircleAvatar(
-                            backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(globals.backgroundAlpha),
-                            radius: (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1),
+                            backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(0),
+                            radius: _counterRadius,
                             child: InkWell(
-                              child: Icon(Icons.arrow_downward),
+                              splashColor: globals.playerColors[globals.playerNumber],
+                              child: Icon(Icons.arrow_downward, size: _counterRadius,),
                               onTap: (){
                                 onColumnPressed(boardX,false);
                               },
@@ -276,14 +281,18 @@ class _GamePageState extends State<GamePage> {
                       } else if (boardY == globals.boardSize+1) {
                         //Bomb counter
                         return Padding(
-                          padding: EdgeInsets.only(left: globals.defaultPadding/globals.boardSize,right: globals.defaultPadding/globals.boardSize),
+                          padding: EdgeInsets.only(left: _paddingInsets,right: _paddingInsets),
                           child: CircleAvatar(
-                            backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(globals.backgroundAlpha),
-                            radius: (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1),
+                            backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(0),
+                            radius: _counterRadius,
                             child: InkWell(
-                              child: Icon(Icons.flare),
+                              enableFeedback: globals.playerBombs[globals.playerNumber-1],
+                              splashColor: globals.playerColors[globals.playerNumber],
+                              child: globals.playerBombs[globals.playerNumber-1] ? Icon(Icons.flare, size: _counterRadius,) : Container(),
                               onTap: (){
-                                onColumnPressed(boardX,true);
+                                if (globals.playerBombs[globals.playerNumber-1]) {
+                                  onColumnPressed(boardX,true);
+                                }
                               },
                             ),
                           ),
@@ -291,10 +300,10 @@ class _GamePageState extends State<GamePage> {
                       } else {
                         //board
                         return Padding(
-                          padding: EdgeInsets.only(left: globals.defaultPadding/globals.boardSize,right: globals.defaultPadding/globals.boardSize),
+                          padding: EdgeInsets.only(left: _paddingInsets,right: _paddingInsets),
                           child: CircleAvatar(
                             backgroundColor: globals.playerColors[globals.mainBoard[boardX][boardY-1]],
-                            radius: (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1),
+                            radius: _counterRadius,
                             child: InkWell(
                               onTap: () {
                                 onColumnPressed(boardX,false);
