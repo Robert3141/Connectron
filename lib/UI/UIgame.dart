@@ -8,7 +8,7 @@ import 'package:Connectron/logic.dart' as logic;
 import 'package:flutter/rendering.dart';
 
 class GamePage extends StatefulWidget {
-  GamePage({Key key, this.title}) : super (key : key);
+  GamePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -24,7 +24,9 @@ class _GamePageState extends State<GamePage> {
   bool addCounter(int columnNumber) {
     //add counter to array if not full
     bool counterAdded = globals.mainBoard[columnNumber][0] == 0;
-    globals.mainBoard[columnNumber][0] = counterAdded ? globals.playerNumber : globals.mainBoard[columnNumber][0];
+    globals.mainBoard[columnNumber][0] = counterAdded
+        ? globals.playerNumber
+        : globals.mainBoard[columnNumber][0];
     return counterAdded;
   }
 
@@ -57,11 +59,12 @@ class _GamePageState extends State<GamePage> {
           content: Text(message),
           actions: <Widget>[
             FlatButton(
-              child: Text(globals.errorActionAccept), onPressed: (){
-              Navigator.of(context).pop();
-              if (pop) {
+              child: Text(globals.errorActionAccept),
+              onPressed: () {
                 Navigator.of(context).pop();
-              }
+                if (pop) {
+                  Navigator.of(context).pop();
+                }
               },
             )
           ],
@@ -80,14 +83,17 @@ class _GamePageState extends State<GamePage> {
     //get send port from receive port
     SendPort sendPort = await receivePort.first;
     //return the value from the isolate
-    return await sendReceive(sendPort, globals.recursionLimit, globals.mainBoard, globals.boardSize);
+    return await sendReceive(
+        sendPort, globals.recursionLimit, globals.mainBoard, globals.boardSize);
   }
+
   Future sendReceive(SendPort port, recursion, board, boardSize) {
     ReceivePort receivePort = ReceivePort();
     //send data in port into isolate
-    port.send([receivePort.sendPort,recursion,board,boardSize]);
+    port.send([receivePort.sendPort, recursion, board, boardSize]);
     return receivePort.first;
   }
+
   //the actual isolate routine
   static dataLoader(SendPort sendPort) async {
     //get the port of the isolate
@@ -115,20 +121,21 @@ class _GamePageState extends State<GamePage> {
     //choose column
     //Web doesn't support isolates
     //run in isolate to stop main thread being cluttered so UI can still update
-    if (!kIsWeb)  {
+    if (!kIsWeb) {
       columnChosen = await isolateMinMax();
     } else {
-      columnChosen = await logic.minMax(globals.recursionLimit, globals.mainBoard, globals.boardSize, true);
+      columnChosen = await logic.minMax(
+          globals.recursionLimit, globals.mainBoard, globals.boardSize, true);
     }
-
 
     //run procedures
     if (addCounter(columnChosen)) {
       setState(() {
-        globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize, columnChosen);
+        globals.mainBoard = logic.applyGravity(
+            globals.mainBoard, globals.boardSize, columnChosen);
       });
       //temp increase amount of players
-      winner = logic.checkWinner(globals.mainBoard,globals.boardSize);
+      winner = logic.checkWinner(globals.mainBoard, globals.boardSize);
       if (winner == 0 && spaceOnBoard()) {
         //next player already gonna occur
       } else {
@@ -160,7 +167,7 @@ class _GamePageState extends State<GamePage> {
 
     //Add scores
     if (winnerNumber != 0) {
-      globals.playerScores[winnerNumber-1]+=globals.amountOfPlayers;
+      globals.playerScores[winnerNumber - 1] += globals.amountOfPlayers;
     }
 
     //increment round
@@ -169,17 +176,28 @@ class _GamePageState extends State<GamePage> {
       //find overall winner
       overallWinner = 0;
       for (int i = 1; i <= globals.amountOfPlayers; i++) {
-        if (globals.playerScores[i-1] > (overallWinner == 0 ? 0 : globals.playerScores[overallWinner-1])) {
+        if (globals.playerScores[i - 1] >
+            (overallWinner == 0
+                ? 0
+                : globals.playerScores[overallWinner - 1])) {
           overallWinner = i;
         }
       }
       //output winner
-      msgBox(globals.errorTitleWin, globals.errorMsgWinner + globals.playerNames[winnerNumber] + globals.errorMsgOverall + globals.playerNames[overallWinner], true);
+      msgBox(
+          globals.errorTitleWin,
+          globals.errorMsgWinner +
+              globals.playerNames[winnerNumber] +
+              globals.errorMsgOverall +
+              globals.playerNames[overallWinner],
+          true);
     } else {
       //output winner
-      msgBox(globals.errorTitleWin, globals.errorMsgWinner + globals.playerNames[winnerNumber], false);
+      msgBox(globals.errorTitleWin,
+          globals.errorMsgWinner + globals.playerNames[winnerNumber], false);
       //reset variables
-      globals.mainBoard = new List<List<int>>.generate(globals.boardSize, (i) => List<int>.generate(globals.boardSize, (j) => 0));
+      globals.mainBoard = new List<List<int>>.generate(globals.boardSize,
+          (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerNumber = 1;
     }
     //end running
@@ -198,15 +216,16 @@ class _GamePageState extends State<GamePage> {
         if (addCounter(columnNumber)) {
           setState(() {
             if (bombPlayed) {
-              globals.playerBombs[globals.playerNumber-1] = false;
-              globals.mainBoard = logic.playBomb(columnNumber, globals.mainBoard);
+              globals.playerBombs[globals.playerNumber - 1] = false;
+              globals.mainBoard =
+                  logic.playBomb(columnNumber, globals.mainBoard);
             } else {
-              globals.mainBoard = logic.applyGravity(globals.mainBoard, globals.boardSize, columnNumber);
+              globals.mainBoard = logic.applyGravity(
+                  globals.mainBoard, globals.boardSize, columnNumber);
             }
-
           });
           winner = logic.checkWinner(globals.mainBoard, globals.boardSize);
-          if (winner == 0 && spaceOnBoard()){
+          if (winner == 0 && spaceOnBoard()) {
             await nextPlayer();
           } else {
             nextRound(winner);
@@ -216,7 +235,7 @@ class _GamePageState extends State<GamePage> {
           globals.running = false;
         }
       }
-    } catch(e) {
+    } catch (e) {
       msgBox("Error", e.toString(), false);
     }
   }
@@ -228,97 +247,122 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     //local variables of size
-    double _paddingInsets = globals.defaultPadding/globals.boardSize;
-    double _counterSize = (MediaQuery.of(context).size.width - globals.defaultPadding) / (globals.boardSize + 1);
-    double _counterRadius = (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) / (globals.boardSize + 1);
+    double _paddingInsets = globals.defaultPadding / globals.boardSize;
+    double _counterSize =
+        (MediaQuery.of(context).size.width - globals.defaultPadding) /
+            (globals.boardSize + 1);
+    double _counterRadius =
+        (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) /
+            (globals.boardSize + 1);
 
     return Scaffold(
-      backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(globals.backgroundAlpha),
+      backgroundColor: globals.playerColors[globals.playerNumber]
+          .withAlpha(globals.backgroundAlpha),
       appBar: AppBar(
         title: Text(globals.titleGame),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.help),onPressed: (){msgBox(globals.errorTitleHelp,globals.errorMsgHelpGame, false);},)
+          IconButton(
+            icon: Icon(Icons.help),
+            onPressed: () {
+              msgBox(globals.errorTitleHelp, globals.errorMsgHelpGame, false);
+            },
+          )
         ],
       ),
-      body: Container(
-        alignment: Alignment.center,
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            //MAIN GRID
-            ListView.builder(
+      body: ListView.builder(
+        shrinkWrap: true,
+        padding: EdgeInsets.all(globals.defaultPadding),
+        itemCount: globals.bombCounter
+            ? globals.boardSize + 2
+            : globals.boardSize + 1, //For extra counters
+        scrollDirection: Axis.vertical,
+        itemBuilder: (BuildContext context, int boardY) {
+          //Horizontal Board
+          return Container(
+            alignment: Alignment.center,
+            padding:
+                EdgeInsets.only(top: _paddingInsets, bottom: _paddingInsets),
+            height: _counterSize,
+            child: ListView.builder(
               shrinkWrap: true,
-              padding: EdgeInsets.all(globals.defaultPadding),
-              itemCount: globals.bombCounter ? globals.boardSize+2 : globals.boardSize+1,//For extra counters
-              scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, int boardY){
-                //Horizontal Board
-                return Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: _paddingInsets,bottom: _paddingInsets),
-                  height: _counterSize,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: globals.boardSize,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int boardX) {
-                      if (boardY == 0){
-                        //Downward arrow
-                        return Padding(
-                          padding: EdgeInsets.only(left: _paddingInsets,right: _paddingInsets),
-                          child: CircleAvatar(
-                            backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(0),
-                            radius: _counterRadius,
-                            child: InkWell(
-                              splashColor: globals.playerColors[globals.playerNumber],
-                              child: Icon(Icons.arrow_downward, size: _counterRadius,),
-                              onTap: (){
-                                onColumnPressed(boardX,false);
-                              },
-                            ),
+              itemCount: globals.boardSize,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int boardX) {
+                if (boardY == 0) {
+                  //Downward arrow
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        left: _paddingInsets, right: _paddingInsets),
+                    child: CircleAvatar(
+                      backgroundColor: globals
+                          .playerColors[globals.playerNumber]
+                          .withAlpha(0),
+                      radius: _counterRadius,
+                      child: InkWell(
+                        splashColor: globals.playerColors[globals.playerNumber],
+                        child: Container(
+                          child: Icon(
+                            Icons.arrow_downward,
+                            size: _counterRadius,
                           ),
-                        );
-                      } else if (boardY == globals.boardSize+1) {
-                        //Bomb counter
-                        return Padding(
-                          padding: EdgeInsets.only(left: _paddingInsets,right: _paddingInsets),
-                          child: CircleAvatar(
-                            backgroundColor: globals.playerColors[globals.playerNumber].withAlpha(0),
-                            radius: _counterRadius,
-                            child: InkWell(
-                              enableFeedback: globals.playerBombs[globals.playerNumber-1],
-                              splashColor: globals.playerColors[globals.playerNumber],
-                              child: globals.playerBombs[globals.playerNumber-1] ? Icon(Icons.flare, size: _counterRadius,) : Container(),
-                              onTap: (){
-                                if (globals.playerBombs[globals.playerNumber-1]) {
-                                  onColumnPressed(boardX,true);
-                                }
-                              },
-                            ),
-                          ),
-                        );
-                      } else {
-                        //board
-                        return Padding(
-                          padding: EdgeInsets.only(left: _paddingInsets,right: _paddingInsets),
-                          child: CircleAvatar(
-                            backgroundColor: globals.playerColors[globals.mainBoard[boardX][boardY-1]],
-                            radius: _counterRadius,
-                            child: InkWell(
-                              onTap: () {
-                                onColumnPressed(boardX,false);
-                              },
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                );
+                        ),
+                        onTap: () {
+                          onColumnPressed(boardX, false);
+                        },
+                      ),
+                    ),
+                  );
+                } else if (boardY == globals.boardSize + 1) {
+                  //Bomb counter
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        left: _paddingInsets, right: _paddingInsets),
+                    child: CircleAvatar(
+                      backgroundColor: globals
+                          .playerColors[globals.playerNumber]
+                          .withAlpha(0),
+                      radius: _counterRadius,
+                      child: InkWell(
+                        enableFeedback:
+                            globals.playerBombs[globals.playerNumber - 1],
+                        splashColor: globals.playerColors[globals.playerNumber],
+                        child: globals.playerBombs[globals.playerNumber - 1]
+                            ? Container(
+                                child: Icon(
+                                  Icons.flare,
+                                  size: _counterRadius,
+                                ),
+                              )
+                            : Container(),
+                        onTap: () {
+                          if (globals.playerBombs[globals.playerNumber - 1]) {
+                            onColumnPressed(boardX, true);
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                } else {
+                  //board
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        left: _paddingInsets, right: _paddingInsets),
+                    child: CircleAvatar(
+                      backgroundColor: globals
+                          .playerColors[globals.mainBoard[boardX][boardY - 1]],
+                      radius: _counterRadius,
+                      child: InkWell(
+                        onTap: () {
+                          onColumnPressed(boardX, false);
+                        },
+                      ),
+                    ),
+                  );
+                }
               },
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
