@@ -130,7 +130,6 @@ class _SettingsState extends State<SettingsPage> {
   }
 
   void onLblBombPressed(bool newBomb) {
-    msgBox(newBomb.toString(), globals.recursionEnabled.toString() + "|" + globals.bombCounter.toString());
     if (!globals.recursionEnabled) {
       setState(() {
         globals.bombCounter = newBomb;
