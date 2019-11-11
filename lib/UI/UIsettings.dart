@@ -2,12 +2,11 @@
 import 'package:Connectron/UI/UIgame.dart';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({Key key, this.title}) : super (key: key);
+  SettingsPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -34,7 +33,7 @@ class _SettingsState extends State<SettingsPage> {
       msgBox(globals.errorTitleInput, globals.errorMsgInputBoardSizeSmall);
     }
     //check player amount
-    if (globals.amountOfPlayers > globals.playerMax){
+    if (globals.amountOfPlayers > globals.playerMax) {
       //TOO LARGE
       issue = true;
       msgBox(globals.errorTitleInput, globals.errorMsgInputPlayerAmountLarge);
@@ -99,7 +98,12 @@ class _SettingsState extends State<SettingsPage> {
           title: Text(messageTitle),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(child: Text(globals.errorActionAccept), onPressed: (){Navigator.of(context).pop();},)
+            FlatButton(
+              child: Text(globals.errorActionAccept),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
           ],
         ),
       );
@@ -116,94 +120,103 @@ class _SettingsState extends State<SettingsPage> {
         }
       }
       //set new values
-      if (globals.selectedPreset != globals.optionalPresetsTitles.length-1){
-        globals.boardSize = globals.optionalPresetsValues[globals.selectedPreset][0];
-        globals.amountOfPlayers = globals.optionalPresetsValues[globals.selectedPreset][1];
+      if (globals.selectedPreset != globals.optionalPresetsTitles.length - 1) {
         setState(() {
-          globals.conBoardSize.text = globals.boardSize.toString();
-          globals.conAmountOfPlayers.text = globals.amountOfPlayers.toString();
-          globals.recursionEnabled = globals.amountOfPlayers <= 1;
-          globals.bombCounter = globals.recursionEnabled ? false : globals.bombCounter;
+          globals.conBoardSize.text = globals
+              .optionalPresetsValues[globals.selectedPreset][0]
+              .toString();
+          globals.conAmountOfPlayers.text = globals
+              .optionalPresetsValues[globals.selectedPreset][1]
+              .toString();
+          globals.recursionEnabled =
+              globals.optionalPresetsValues[globals.selectedPreset][1] <= 1;
+          globals.bombCounter =
+              globals.recursionEnabled ? false : globals.bombCounter;
         });
       }
     });
   }
 
   void onLblBombPressed(bool newBomb) {
-    if (!globals.recursionEnabled) {
-      setState(() {
-        globals.bombCounter = newBomb;
-      });
-    } else {
-      setState(() {
-        globals.bombCounter = false;
-      });
-    }
+    setState(() {
+      globals.bombCounter = newBomb;
+    });
   }
 
   void onLblBoardSizePressed(String boardSizeString) {
-    globals.boardSize = int.parse(boardSizeString) ?? globals.boardDefault;
-    globals.boardSize = globals.boardSize == 0 ? globals.boardDefault : globals.boardSize;
     setState(() {
-      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+      globals.selectedPreset = globals.optionalPresetsTitles.length - 1;
     });
   }
 
   void onLblPlayerAmountPressed(String playerAmountString) {
-    globals.amountOfPlayers = int.parse(playerAmountString) ?? globals.playerDefault;
-    globals.amountOfPlayers = globals.amountOfPlayers == 0 ? globals.playerDefault : globals.amountOfPlayers;
     //enable recursion
     setState(() {
-      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
-      globals.recursionEnabled = globals.amountOfPlayers < 2;
-      globals.bombCounter = globals.recursionEnabled ? false : globals.bombCounter;
+      globals.selectedPreset = globals.optionalPresetsTitles.length - 1;
+      globals.recursionEnabled =
+          int.parse(playerAmountString ?? globals.playerDefault) < 2;
+      globals.bombCounter =
+          globals.recursionEnabled ? false : globals.bombCounter;
     });
   }
 
   void onLblLineLengthPressed(String lineLengthString) {
-    globals.lineLength = int.parse(lineLengthString) ?? globals.lineDefault;
-    globals.lineLength = globals.lineLength == 0 ? globals.lineDefault : globals.lineLength;
     setState(() {
-      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+      globals.selectedPreset = globals.optionalPresetsTitles.length - 1;
     });
   }
 
   void onLblRoundAmountPressed(String roundAmountString) {
-    globals.amountOfRounds = int.parse(roundAmountString) ?? globals.roundDefault;
-    globals.amountOfRounds = globals.amountOfRounds == 0 ? globals.roundDefault : globals.amountOfRounds;
     setState(() {
-      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+      globals.selectedPreset = globals.optionalPresetsTitles.length - 1;
     });
   }
 
   void onLblRecursionPressed(String recursionString) {
-    globals.recursionLimit = int.parse(recursionString) ?? globals.recursionDefault;
-    globals.recursionLimit = globals.recursionLimit == 0 ? globals.recursionDefault : globals.recursionLimit;
     setState(() {
-      globals.selectedPreset = globals.optionalPresetsTitles.length-1;
+      globals.selectedPreset = globals.optionalPresetsTitles.length - 1;
     });
   }
 
-  void onBtnRunGamePressed(){
-    //local vars
+  void onBtnRunGamePressed() {
+    //get inputs
+    globals.boardSize =
+        int.parse(globals.conBoardSize.text ?? globals.boardDefault);
+    globals.amountOfPlayers =
+        int.parse(globals.conAmountOfPlayers.text ?? globals.playerDefault);
+    globals.lineLength =
+        int.parse(globals.conLineLength.text ?? globals.lineDefault);
+    globals.amountOfRounds =
+        int.parse(globals.conNumberOfRounds.text ?? globals.roundDefault);
+    globals.recursionLimit =
+        int.parse(globals.conRecursion.text ?? globals.recursionDefault);
+
+    //check problem
     bool issue = checkProblems();
 
     //no issues
     if (!issue) {
       //reset variables
       if (globals.amountOfPlayers > 1) {
-        globals.playerBombs = new List<bool>.generate(globals.amountOfPlayers, (i) => true);
+        globals.playerBombs =
+            new List<bool>.generate(globals.amountOfPlayers, (i) => true);
       } else {
         globals.bombCounter = false;
       }
-      globals.mainBoard = new List<List<int>>.generate(globals.boardSize, (i) => List<int>.generate(globals.boardSize, (j) => 0));
-      globals.playerScores = globals.amountOfPlayers <= 1 ? new List<int>.generate(2, (i) => 0) : new List<int>.generate(globals.amountOfPlayers, (i) => 0);
+      globals.mainBoard = new List<List<int>>.generate(globals.boardSize,
+          (i) => List<int>.generate(globals.boardSize, (j) => 0));
+      globals.playerScores = globals.amountOfPlayers <= 1
+          ? new List<int>.generate(2, (i) => 0)
+          : new List<int>.generate(globals.amountOfPlayers, (i) => 0);
       globals.playerNumber = 1;
       globals.roundNumber = 1;
       globals.running = false;
 
       //Push interface
-      Navigator.push(context, MaterialPageRoute(builder: (context) => GamePage(title: globals.titleGame)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => GamePage(title: globals.titleGame)));
     }
   }
 
@@ -217,8 +230,21 @@ class _SettingsState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.brightness_3),onPressed: (){DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark? Brightness.light: Brightness.dark);},),
-          IconButton(icon: Icon(Icons.help),onPressed: (){msgBox(globals.errorTitleHelp,globals.errorMsgHelpMain);},)
+          IconButton(
+            icon: Icon(Icons.brightness_3),
+            onPressed: () {
+              DynamicTheme.of(context).setBrightness(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Brightness.light
+                      : Brightness.dark);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.help),
+            onPressed: () {
+              msgBox(globals.errorTitleHelp, globals.errorMsgHelpMain);
+            },
+          )
         ],
       ),
       body: Container(
@@ -240,16 +266,22 @@ class _SettingsState extends State<SettingsPage> {
                     child: Align(
                       alignment: AlignmentDirectional.center,
                       child: DropdownButton<String>(
-                        value:globals.optionalPresetsTitles[globals.selectedPreset],
-                        items:globals.optionalPresetsTitles.map<DropdownMenuItem<String>>((String value) {
+                        value: globals
+                            .optionalPresetsTitles[globals.selectedPreset],
+                        items: globals.optionalPresetsTitles
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value, textAlign: TextAlign.center,),
+                            child: Text(
+                              value,
+                              textAlign: TextAlign.center,
+                            ),
                           );
                         }).toList(),
                         icon: Icon(Icons.arrow_downward),
                         onChanged: onLblPresetsPressed,
-                        underline: Container(height: 2,color:Theme.of(context).primaryColor),
+                        underline: Container(
+                            height: 2, color: Theme.of(context).primaryColor),
                       ),
                     ),
                   ),
@@ -257,36 +289,67 @@ class _SettingsState extends State<SettingsPage> {
               ),
             ),
             Divider(),
-            InkWell(
-              enableFeedback: globals.recursionEnabled,
-              splashColor: Theme.of(context).primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      globals.lblBombCounter,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: AlignmentDirectional.center,
-                      child: InkWell(
-                        onTap: (){
-                          onLblBombPressed(!globals.bombCounter);
-                        },
-                        child: Switch(
-                          value: globals.bombCounter,
-                          onChanged: onLblBombPressed,
+            //Either display bomb counter toggle or display CPU level
+            !globals.recursionEnabled
+                ? InkWell(
+                    enableFeedback: globals.recursionEnabled,
+                    splashColor: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            globals.lblBombCounter,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentDirectional.center,
+                            child: InkWell(
+                              onTap: () {
+                                onLblBombPressed(!globals.bombCounter);
+                              },
+                              child: Switch(
+                                value: globals.bombCounter,
+                                onChanged: onLblBombPressed,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : InkWell(
+                    enableFeedback: globals.recursionEnabled,
+                    splashColor: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            globals.lblRecursion,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: globals.conRecursion,
+                            enabled: globals.recursionEnabled,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              WhitelistingTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: onLblRecursionPressed,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                hintText: globals.recursionDefault.toString(),
+                                border: OutlineInputBorder()),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-
-                ],
-              ),
-            ),
             Divider(),
             InkWell(
               splashColor: Theme.of(context).primaryColor,
@@ -294,22 +357,21 @@ class _SettingsState extends State<SettingsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(
-                    child: Text(
-                      globals.lblBoardSize,
-                      textAlign: TextAlign.center
-                    ),
+                    child:
+                        Text(globals.lblBoardSize, textAlign: TextAlign.center),
                   ),
                   Expanded(
                     child: TextField(
                       controller: globals.conBoardSize,
                       keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
                       onChanged: onLblBoardSizePressed,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                           hintText: globals.boardDefault.toString(),
-                          border: OutlineInputBorder()
-                      ),
+                          border: OutlineInputBorder()),
                     ),
                   ),
                 ],
@@ -323,24 +385,24 @@ class _SettingsState extends State<SettingsPage> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                        globals.lblAmountOfPlayers,
-                        textAlign: TextAlign.center,
+                      globals.lblAmountOfPlayers,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   Expanded(
                     child: TextField(
                       controller: globals.conAmountOfPlayers,
                       keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
                       onChanged: onLblPlayerAmountPressed,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                           hintText: globals.playerDefault.toString(),
-                          border: OutlineInputBorder()
-                      ),
+                          border: OutlineInputBorder()),
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -352,24 +414,24 @@ class _SettingsState extends State<SettingsPage> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                        globals.lblLineLength,
-                        textAlign: TextAlign.center,
+                      globals.lblLineLength,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   Expanded(
                     child: TextField(
                       controller: globals.conLineLength,
                       keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
                       onChanged: onLblLineLengthPressed,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                           hintText: globals.lineDefault.toString(),
-                          border: OutlineInputBorder()
-                      ),
+                          border: OutlineInputBorder()),
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -389,47 +451,16 @@ class _SettingsState extends State<SettingsPage> {
                     child: TextField(
                       controller: globals.conNumberOfRounds,
                       keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
                       onChanged: onLblRoundAmountPressed,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                           hintText: globals.roundDefault.toString(),
-                          border: OutlineInputBorder()
-                      ),
+                          border: OutlineInputBorder()),
                     ),
                   ),
-
-                ],
-              ),
-            ),
-            Divider(),
-            InkWell(
-              enableFeedback: globals.recursionEnabled,
-              splashColor: Theme.of(context).primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      globals.lblRecursion,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: globals.conRecursion,
-                      enabled: globals.recursionEnabled,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
-                      onChanged: onLblRecursionPressed,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          hintText: globals.recursionDefault.toString(),
-                          border: OutlineInputBorder()
-                      ),
-                    ),
-                  ),
-
                 ],
               ),
             ),
@@ -441,10 +472,8 @@ class _SettingsState extends State<SettingsPage> {
               onPressed: onBtnRunGamePressed,
             ),
           ],
-
         ),
       ),
     );
   }
-
 }
