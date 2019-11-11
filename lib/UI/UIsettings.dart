@@ -179,44 +179,66 @@ class _SettingsState extends State<SettingsPage> {
   }
 
   void onBtnRunGamePressed() {
-    //get inputs
-    globals.boardSize =
-        int.parse(globals.conBoardSize.text ?? globals.boardDefault);
-    globals.amountOfPlayers =
-        int.parse(globals.conAmountOfPlayers.text ?? globals.playerDefault);
-    globals.lineLength =
-        int.parse(globals.conLineLength.text ?? globals.lineDefault);
-    globals.amountOfRounds =
-        int.parse(globals.conNumberOfRounds.text ?? globals.roundDefault);
-    globals.recursionLimit =
-        int.parse(globals.conRecursion.text ?? globals.recursionDefault);
+    try {
+      //get inputs
+      //board
+      String _boardString =
+          globals.conBoardSize.text ?? globals.boardDefault.toString();
+      globals.boardSize = int.parse(_boardString == ""
+          ? globals.boardDefault.toString()
+          : _boardString);
+      //player amount
+      String _playerString = globals
+          .conAmountOfPlayers.text;
+      globals.amountOfPlayers = int.parse(_playerString == ""
+          ? globals.playerDefault.toString()
+          : _playerString);
+      //line length
+      String _lineString =
+          globals.conLineLength.text ?? globals.lineDefault.toString();
+      globals.lineLength = int.parse(
+          _lineString == "" ? globals.lineDefault.toString() : _lineString);
+      //round amount
+      String _roundString =
+          globals.conNumberOfRounds.text ?? globals.roundDefault.toString();
+      globals.amountOfRounds = int.parse(
+          _roundString == "" ? globals.roundDefault.toString() : _roundString);
+      //recursion amount
+      String _recursionString =
+          globals.conRecursion.text ?? globals.recursionDefault.toString();
+      globals.recursionLimit = int.parse(_recursionString == ""
+          ? globals.recursionDefault.toString()
+          : _recursionString);
 
-    //check problem
-    bool issue = checkProblems();
+      //check problem
+      bool issue = checkProblems();
 
-    //no issues
-    if (!issue) {
-      //reset variables
-      if (globals.amountOfPlayers > 1) {
-        globals.playerBombs =
-            new List<bool>.generate(globals.amountOfPlayers, (i) => true);
-      } else {
-        globals.bombCounter = false;
+      //no issues
+      if (!issue) {
+        //reset variables
+        if (globals.amountOfPlayers > 1) {
+          globals.playerBombs =
+              new List<bool>.generate(globals.amountOfPlayers, (i) => true);
+        } else {
+          globals.bombCounter = false;
+        }
+        globals.mainBoard = new List<List<int>>.generate(globals.boardSize,
+            (i) => List<int>.generate(globals.boardSize, (j) => 0));
+        globals.playerScores = globals.amountOfPlayers <= 1
+            ? new List<int>.generate(2, (i) => 0)
+            : new List<int>.generate(globals.amountOfPlayers, (i) => 0);
+        globals.playerNumber = 1;
+        globals.roundNumber = 1;
+        globals.running = false;
+
+        //Push interface
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => GamePage(title: globals.titleGame)));
       }
-      globals.mainBoard = new List<List<int>>.generate(globals.boardSize,
-          (i) => List<int>.generate(globals.boardSize, (j) => 0));
-      globals.playerScores = globals.amountOfPlayers <= 1
-          ? new List<int>.generate(2, (i) => 0)
-          : new List<int>.generate(globals.amountOfPlayers, (i) => 0);
-      globals.playerNumber = 1;
-      globals.roundNumber = 1;
-      globals.running = false;
-
-      //Push interface
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => GamePage(title: globals.titleGame)));
+    } catch (e) {
+      msgBox("Error", e.toString());
     }
   }
 
