@@ -147,6 +147,21 @@ List<List<int>> applyGravity(List<List<int>> board, int boardSize, int x) {
   return board;
 }
 
+List<List<int>> boardGravity(List<List<int>> board, int boardSize, int x) {
+  //loop through entire array except bottom line
+  for (int i = 0; i < 2; i++) {
+    for (int y = boardSize-1; y > 0; y--) {
+      //if below is empty then drop down and replace
+      if (board[x][y] == 0) {
+        board[x][y] = board[x][y-1];
+        board[x][y-1] = 0;
+      }
+    }
+  }
+
+  return board;
+}
+
 List<List<int>> bombRemoval(int x, int y, List<List<int>> movedBoard) {
   if (x>0) {
     if (y>0) {
@@ -188,24 +203,30 @@ List<List<int>> playBomb(int x, List<List<int>> movedBoard) {
 
       //bomb
       movedBoard = bombRemoval(x, y, movedBoard);
-      movedBoard = applyGravity(movedBoard, globals.boardSize, x);
+      movedBoard = boardGravity(movedBoard, globals.boardSize, x);
       if (x > 0) {
-        movedBoard = applyGravity(movedBoard, globals.boardSize, x-1);
+        //apply gravity on all tokens above
+        for (int i = 0; i < globals.boardSize-3;i++) {
+          movedBoard = boardGravity(movedBoard, globals.boardSize, x-1);
+        }
       }
       if (x < globals.boardSize-1) {
-        movedBoard = applyGravity(movedBoard, globals.boardSize, x+1);
+        //apply gravity on all tokens above
+        for (int i = 0; i < globals.boardSize-3;i++) {
+          movedBoard = boardGravity(movedBoard, globals.boardSize, x+1);
+        }
       }
       return movedBoard;
     }
   }
 
   movedBoard = bombRemoval(x, globals.boardSize-1, movedBoard);
-  movedBoard = applyGravity(movedBoard, globals.boardSize, x);
+  movedBoard = boardGravity(movedBoard, globals.boardSize, x);
   if (x > 0) {
-    movedBoard = applyGravity(movedBoard, globals.boardSize, x-1);
+    movedBoard = boardGravity(movedBoard, globals.boardSize, x-1);
   }
   if (x < globals.boardSize-1) {
-    movedBoard = applyGravity(movedBoard, globals.boardSize, x+1);
+    movedBoard = boardGravity(movedBoard, globals.boardSize, x+1);
   }
   return movedBoard;
 }
