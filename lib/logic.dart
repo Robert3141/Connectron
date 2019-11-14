@@ -2,8 +2,6 @@ library connectron.logic;
 import 'package:Connectron/globals.dart' as globals;
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-
 int randomNumber(int min, int max) {
   final random = new Random();
   return min + random.nextInt(max-min);

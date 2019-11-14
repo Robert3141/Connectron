@@ -185,17 +185,19 @@ class _GamePageState extends State<GamePage> {
       }
       //output winner
       msgBox(
-          globals.errorTitleWin,
-          globals.errorMsgWinner +
+          globals.outputTitleWin,
+          globals.outputMsgWinner +
               globals.playerNames[winnerNumber] +
-              globals.errorMsgOverall +
+              globals.outputMsgOverall +
               globals.playerNames[overallWinner],
           true);
     } else {
       //output winner
-      msgBox(globals.errorTitleWin,
-          globals.errorMsgWinner + globals.playerNames[winnerNumber], false);
+      msgBox(globals.outputTitleWin,
+          globals.outputMsgWinner + globals.playerNames[winnerNumber], false);
       //reset variables
+      globals.playerBombs = new List<bool>.generate(globals.amountOfPlayers,
+          (i) => false);
       globals.mainBoard = new List<List<int>>.generate(globals.boardSize,
           (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerNumber = 1;
@@ -231,12 +233,12 @@ class _GamePageState extends State<GamePage> {
             nextRound(winner);
           }
         } else {
-          msgBox(globals.errorTitleInput, globals.errorMsgBoardNoSpace, false);
+          msgBox(globals.errorTitleInput, globals.outputMsgBoardNoSpace, false);
           globals.running = false;
         }
       }
     } catch (e) {
-      msgBox("Error", e.toString(), false);
+      msgBox(globals.errorTitleError, e.toString(), false);
     }
   }
 
@@ -264,7 +266,7 @@ class _GamePageState extends State<GamePage> {
           IconButton(
             icon: Icon(Icons.help),
             onPressed: () {
-              msgBox(globals.errorTitleHelp, globals.errorMsgHelpGame, false);
+              msgBox(globals.helpTitleHelp, globals.helpMsgHelpGame, false);
             },
           )
         ],
