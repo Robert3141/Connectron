@@ -236,7 +236,7 @@ class _GamePageState extends State<GamePage> {
         }
       }
     } catch (e) {
-      msgBox("Error", e.toString(), false);
+      msgBox(globals.errorTitleError, e.toString(), false);
     }
   }
 

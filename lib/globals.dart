@@ -48,6 +48,7 @@ const String lblRoundNum = "Number of rounds ($roundMin-$roundMax)";
 const String lblRecursion = "CPU Level ($recursionMin-$recursionMax)";
 const String lblBombCounter = "Use bomb counter";
 const String lblRunGame = "Run Game";
+const String errorTitleError = "Error";
 const String errorActionAccept = "OK";
 const String errorTitleInput = "Invalid Input";
 const String errorMsgInputBoardSizeSmall = "The board size is too small. It should be $boardMin-$boardMax";

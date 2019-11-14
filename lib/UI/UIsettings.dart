@@ -238,7 +238,7 @@ class _SettingsState extends State<SettingsPage> {
                 builder: (context) => GamePage(title: globals.titleGame)));
       }
     } catch (e) {
-      msgBox("Error", e.toString());
+      msgBox(globals.errorTitleError, e.toString());
     }
   }
 
