@@ -41,6 +41,7 @@ const List<String> optionalPresetsTitles = [
   "Custom"
 ];
 const String lblOptionalPrests = "Presets";
+const String lblFineTuning = "Fine Tuning";
 const String lblBoardSize = "Board Size ($boardMin-$boardMax)";
 const String lblAmountOfPlayers = "Amount of players ($playerMin-$playerMax)";
 const String lblLineLength = "Line Length ($lineMin-$lineMax)";
