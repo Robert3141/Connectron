@@ -264,7 +264,7 @@ class _SettingsState extends State<SettingsPage> {
           IconButton(
             icon: Icon(Icons.help),
             onPressed: () {
-              msgBox(globals.errorTitleHelp, globals.errorMsgHelpMain);
+              msgBox(globals.helpTitleHelp, globals.helpMsgHelpMain);
             },
           )
         ],
@@ -283,7 +283,7 @@ class _SettingsState extends State<SettingsPage> {
                       children: <Widget>[
                         Expanded(
                           child: Text(
-                            globals.lblOptionalPrests,
+                            globals.lblOptionalPresets,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -309,6 +309,12 @@ class _SettingsState extends State<SettingsPage> {
                                   height: 2, color: Theme.of(context).primaryColor),
                             ),
                           ),
+                        ),
+                        IconButton(
+                          onPressed: (){
+                            msgBox(globals.helpTitleHelp, globals.helpOptionalPresets);
+                          },
+                          icon: Icon(Icons.help),
                         ),
                       ],
                     ),
@@ -342,6 +348,12 @@ class _SettingsState extends State<SettingsPage> {
                             ),
                           ),
                         ),
+                        IconButton(
+                          onPressed: (){
+                            msgBox(globals.helpTitleHelp, globals.helpBombCounter);
+                          },
+                          icon: Icon(Icons.help),
+                        ),
                       ],
                     ),
                   )
@@ -371,6 +383,12 @@ class _SettingsState extends State<SettingsPage> {
                                 hintText: globals.recursionDefault.toString(),
                                 border: OutlineInputBorder()),
                           ),
+                        ),
+                        IconButton(
+                          onPressed: (){
+                            msgBox(globals.helpTitleHelp, globals.helpRecursion);
+                          },
+                          icon: Icon(Icons.help),
                         ),
                       ],
                     ),
@@ -402,6 +420,12 @@ class _SettingsState extends State<SettingsPage> {
                                     border: OutlineInputBorder()),
                               ),
                             ),
+                            IconButton(
+                              onPressed: (){
+                                msgBox(globals.helpTitleHelp, globals.helpBoardSize);
+                              },
+                              icon: Icon(Icons.help),
+                            ),
                           ],
                         ),
                       ),
@@ -430,6 +454,12 @@ class _SettingsState extends State<SettingsPage> {
                                     hintText: globals.playerDefault.toString(),
                                     border: OutlineInputBorder()),
                               ),
+                            ),
+                            IconButton(
+                              onPressed: (){
+                                msgBox(globals.helpTitleHelp, globals.helpAmountOfPlayers);
+                              },
+                              icon: Icon(Icons.help),
                             ),
                           ],
                         ),
@@ -460,6 +490,12 @@ class _SettingsState extends State<SettingsPage> {
                                     border: OutlineInputBorder()),
                               ),
                             ),
+                            IconButton(
+                              onPressed: (){
+                                msgBox(globals.helpTitleHelp, globals.helpLineLength);
+                              },
+                              icon: Icon(Icons.help),
+                            ),
                           ],
                         ),
                       ),
@@ -488,6 +524,12 @@ class _SettingsState extends State<SettingsPage> {
                                     hintText: globals.roundDefault.toString(),
                                     border: OutlineInputBorder()),
                               ),
+                            ),
+                            IconButton(
+                              onPressed: (){
+                                msgBox(globals.helpTitleHelp, globals.helpRoundNum);
+                              },
+                              icon: Icon(Icons.help),
                             ),
                           ],
                         ),
