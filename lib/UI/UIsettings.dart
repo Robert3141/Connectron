@@ -270,50 +270,53 @@ class _SettingsState extends State<SettingsPage> {
         ],
       ),
       body: Container(
-        child: ListView(
-          padding: EdgeInsets.all(globals.defaultPadding),
+        child: Column(
           children: <Widget>[
-            InkWell(
-              splashColor: Theme.of(context).primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(globals.defaultPadding),
                 children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      globals.lblOptionalPrests,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: AlignmentDirectional.center,
-                      child: DropdownButton<String>(
-                        value: globals
-                            .optionalPresetsTitles[globals.selectedPreset],
-                        items: globals.optionalPresetsTitles
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              textAlign: TextAlign.center,
+                  InkWell(
+                    splashColor: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            globals.lblOptionalPrests,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentDirectional.center,
+                            child: DropdownButton<String>(
+                              value: globals
+                                  .optionalPresetsTitles[globals.selectedPreset],
+                              items: globals.optionalPresetsTitles
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                );
+                              }).toList(),
+                              icon: Icon(Icons.arrow_downward),
+                              onChanged: onLblPresetsPressed,
+                              underline: Container(
+                                  height: 2, color: Theme.of(context).primaryColor),
                             ),
-                          );
-                        }).toList(),
-                        icon: Icon(Icons.arrow_downward),
-                        onChanged: onLblPresetsPressed,
-                        underline: Container(
-                            height: 2, color: Theme.of(context).primaryColor),
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            Divider(),
-            //Either display bomb counter toggle or display CPU level
-            !globals.recursionEnabled
-                ? InkWell(
+                  Divider(),
+                  //Either display bomb counter toggle or display CPU level
+                  !globals.recursionEnabled
+                      ? InkWell(
                     enableFeedback: globals.recursionEnabled,
                     splashColor: Theme.of(context).primaryColor,
                     child: Row(
@@ -342,7 +345,7 @@ class _SettingsState extends State<SettingsPage> {
                       ],
                     ),
                   )
-                : InkWell(
+                      : InkWell(
                     enableFeedback: globals.recursionEnabled,
                     splashColor: Theme.of(context).primaryColor,
                     child: Row(
@@ -372,126 +375,133 @@ class _SettingsState extends State<SettingsPage> {
                       ],
                     ),
                   ),
-            Divider(),
-            InkWell(
-              splashColor: Theme.of(context).primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child:
-                        Text(globals.lblBoardSize, textAlign: TextAlign.center),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: globals.conBoardSize,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly
+                  Divider(),
+                  InkWell(
+                    splashColor: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child:
+                          Text(globals.lblBoardSize, textAlign: TextAlign.center),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: globals.conBoardSize,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              WhitelistingTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: onLblBoardSizePressed,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                hintText: globals.boardDefault.toString(),
+                                border: OutlineInputBorder()),
+                          ),
+                        ),
                       ],
-                      onChanged: onLblBoardSizePressed,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          hintText: globals.boardDefault.toString(),
-                          border: OutlineInputBorder()),
+                    ),
+                  ),
+                  Divider(),
+                  InkWell(
+                    splashColor: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            globals.lblAmountOfPlayers,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: globals.conAmountOfPlayers,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              WhitelistingTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: onLblPlayerAmountPressed,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                hintText: globals.playerDefault.toString(),
+                                border: OutlineInputBorder()),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  InkWell(
+                    splashColor: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            globals.lblLineLength,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: globals.conLineLength,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              WhitelistingTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: onLblLineLengthPressed,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                hintText: globals.lineDefault.toString(),
+                                border: OutlineInputBorder()),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  InkWell(
+                    splashColor: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            globals.lblRoundNum,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: globals.conNumberOfRounds,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              WhitelistingTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: onLblRoundAmountPressed,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                hintText: globals.roundDefault.toString(),
+                                border: OutlineInputBorder()),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
             Divider(),
-            InkWell(
-              splashColor: Theme.of(context).primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      globals.lblAmountOfPlayers,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: globals.conAmountOfPlayers,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
-                      onChanged: onLblPlayerAmountPressed,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          hintText: globals.playerDefault.toString(),
-                          border: OutlineInputBorder()),
-                    ),
-                  ),
-                ],
+            Container(
+              padding: EdgeInsets.only(left: globals.defaultPadding, right: globals.defaultPadding),
+              width: double.infinity,
+              child: RaisedButton(
+                child: Text(globals.lblRunGame),
+                color: Theme.of(context).primaryColor,
+                textTheme: ButtonTextTheme.primary,
+                onPressed: onBtnRunGamePressed,
               ),
-            ),
-            Divider(),
-            InkWell(
-              splashColor: Theme.of(context).primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      globals.lblLineLength,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: globals.conLineLength,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
-                      onChanged: onLblLineLengthPressed,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          hintText: globals.lineDefault.toString(),
-                          border: OutlineInputBorder()),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(),
-            InkWell(
-              splashColor: Theme.of(context).primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      globals.lblRoundNum,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: globals.conNumberOfRounds,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
-                      onChanged: onLblRoundAmountPressed,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          hintText: globals.roundDefault.toString(),
-                          border: OutlineInputBorder()),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(),
-            RaisedButton(
-              child: Text(globals.lblRunGame),
-              color: Theme.of(context).primaryColor,
-              textTheme: ButtonTextTheme.primary,
-              onPressed: onBtnRunGamePressed,
             ),
           ],
         ),
