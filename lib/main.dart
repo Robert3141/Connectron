@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             primaryColor: globals.playerColors[1],
             brightness: Brightness.dark,
           ),
-          home: HomeAppPage(title: "Main",),
+          home: HomeAppPage(title: "Main",),//TODO: set as global const
         );
       },
     );

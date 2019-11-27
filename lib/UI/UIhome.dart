@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:Connectron/UI/UIMultiplayer-LAN.dart';
 import 'package:Connectron/UI/UIsettings.dart';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:flutter/cupertino.dart';
@@ -26,14 +27,14 @@ class _HomeAppState extends State<HomeAppPage> {
         child: ListView(
           children: [
             Container(
-              width: 200,
-              height: 200,
+              width: 200,//TODO: set as global const
+              height: 200,//TODO: set as global const
               alignment: Alignment.center,
-              child: Image(image: AssetImage('assets/ic_launcher-web.png')),
+              child: Image(image: AssetImage('assets/ic_launcher-web.png')),//TODO: set as global const
             ),
 
             RaisedButton(
-              child: Text("Play Game"),
+              child: Text("Play Game"),//TODO: set as global const
               color: Theme.of(context).primaryColor,
               textTheme: ButtonTextTheme.primary,
               onPressed: () {
@@ -46,11 +47,16 @@ class _HomeAppState extends State<HomeAppPage> {
               },
             ),
             RaisedButton(
-              child: Text("LAN Multiplayer"),
+              child: Text("LAN Multiplayer"),//TODO: set as global const
               color: Theme.of(context).primaryColor,
               textTheme: ButtonTextTheme.primary,
               onPressed: (){
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MultiPlayerPage(title: "Multiplayer"),//TODO: set as global const
+                  )
+                );
               },
             ),
           ],
