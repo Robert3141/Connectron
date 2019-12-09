@@ -1,5 +1,5 @@
 import 'dart:isolate';
-
+import 'package:tinycolor/tinycolor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -197,8 +197,8 @@ class _GamePageState extends State<GamePage> {
       msgBox(globals.outputTitleWin,
           globals.outputMsgWinner + globals.playerNames[winnerNumber], false);
       //reset variables
-      globals.playerBombs = new List<bool>.generate(globals.amountOfPlayers,
-          (i) => false);
+      globals.playerBombs =
+          new List<bool>.generate(globals.amountOfPlayers, (i) => false);
       globals.mainBoard = new List<List<int>>.generate(globals.boardSize,
           (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerNumber = 1;
@@ -248,6 +248,19 @@ class _GamePageState extends State<GamePage> {
   /// INTERFACE
   ///
 
+  Color chooseBackgroundColor() {
+    //darken or brighten colour appropriately
+    Color chosenColor = globals.playerColors[globals.playerNumber];
+    if (Theme.of(context).brightness == Brightness.light) {
+      chosenColor = TinyColor(chosenColor).brighten(10).color;
+    } else {
+      do {
+        chosenColor = TinyColor(chosenColor).darken(10).color;
+      } while (!TinyColor(chosenColor).isDark());
+    }
+    return chosenColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     //local variables of size
@@ -260,8 +273,7 @@ class _GamePageState extends State<GamePage> {
             (globals.boardSize + 1);
 
     return Scaffold(
-      backgroundColor: globals.playerColors[globals.playerNumber]
-          .withAlpha(globals.backgroundAlpha),
+      backgroundColor: chooseBackgroundColor(),
       appBar: AppBar(
         title: Text(globals.titleGame),
         actions: <Widget>[
@@ -352,8 +364,12 @@ class _GamePageState extends State<GamePage> {
                     padding: EdgeInsets.only(
                         left: _paddingInsets, right: _paddingInsets),
                     child: CircleAvatar(
-                      backgroundColor: globals
-                          .playerColors[globals.mainBoard[boardX][boardY - 1]],
+                      backgroundColor: globals.mainBoard[boardX][boardY - 1] ==
+                                  0 &&
+                              Theme.of(context).brightness == Brightness.dark
+                          ? Color.fromRGBO(18, 18, 18, 1.0)
+                          : globals.playerColors[globals.mainBoard[boardX]
+                              [boardY - 1]],
                       radius: _counterRadius,
                       child: InkWell(
                         onTap: () {
