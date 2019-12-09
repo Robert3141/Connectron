@@ -260,7 +260,6 @@ class _SettingsState extends State<SettingsPage> {
                   Theme.of(context).brightness == Brightness.dark
                       ? Brightness.light
                       : Brightness.dark);
-              );
             },
           ),
           IconButton(
