@@ -24,8 +24,8 @@ const int roundMin = 1;
 const int roundDefault = 1;
 const int roundMax = 5;
 const int recursionMin = 1;
-const int recursionDefault = 5;
-const int recursionMax = 7;
+const int recursionDefault = 2;
+const int recursionMax = 4;
 const List<List<int>> optionalPresetsValues = [
   //FORMAT board player lineLength, roundAmount, recursionVal
   [boardDefault,playerDefault],

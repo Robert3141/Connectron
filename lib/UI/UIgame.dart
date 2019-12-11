@@ -84,7 +84,7 @@ class _GamePageState extends State<GamePage> {
     SendPort sendPort = await receivePort.first;
     //return the value from the isolate
     return await sendReceive(
-        sendPort, globals.recursionLimit, globals.mainBoard, globals.boardSize);
+        sendPort, 2*globals.recursionLimit, globals.mainBoard, globals.boardSize);
   }
 
   Future sendReceive(SendPort port, recursion, board, boardSize) {
@@ -125,7 +125,7 @@ class _GamePageState extends State<GamePage> {
       columnChosen = await isolateMinMax();
     } else {
       columnChosen = await logic.minMax(
-          globals.recursionLimit, globals.mainBoard, globals.boardSize, true);
+          2*globals.recursionLimit, globals.mainBoard, globals.boardSize, true);
     }
 
     //run procedures
@@ -141,6 +141,10 @@ class _GamePageState extends State<GamePage> {
       } else {
         nextRound(winner);
       }
+    } else {
+      do {
+        columnChosen = logic.randomNumber(0, globals.boardSize-1);
+      } while (!addCounter(columnChosen));
     }
     globals.amountOfPlayers = players;
   }

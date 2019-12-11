@@ -277,12 +277,12 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
           }
           break;
         case 1:
-        //loss
-          score = -1 * (n) * boardSize - 1;
+        //win
+          score = 1 * (n) * boardSize;
           break;
         case 2:
-        //win
-          score = 1 * (n) * boardSize + 1;
+        //loss
+          score = -1 * (n) * boardSize;
           break;
       }
     }
@@ -290,20 +290,29 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
     //return column rather then score for first value
     if (first) {
       //first value so find optimum column
+      score = 0;
       winner = 0;
-      //find lowest value of score
-      for (int i = 0; i < boardSize; i++) {
-        winner = i;
-        score = columnScores[i];
-      }
-      //select winner for highest value
-      winner = randomNumber(0, boardSize-1);
+      //find largest value of score
       for (int i = 0; i < boardSize; i++) {
         if (columnScores[i] > score) {
+          winner = i;
+          score = columnScores[i];
+        }
+      }
+      if (score == 0) {
+        winner = randomNumber(0, boardSize-1);
+      }
+      //select winner for highest value
+      print(score);
+      print("${columnScores[0]}|${columnScores[1]}|${columnScores[2]}|${columnScores[3]}|${columnScores[4]}|${columnScores[5]}|${columnScores[6]}");
+      for (int i = 0; i < boardSize; i++) {
+        //find smallest value
+        if (columnScores[i] < score) {
           //check not going off board
           if (columnScores[i] != -1) {
             score = columnScores[i];
             winner = i;
+
           }
         }
       }
@@ -321,13 +330,16 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
     winner = checkWinner(board, boardSize);
     switch (winner) {
       case 0:
+        //draw
         score = 0;
         break;
       case 1:
-        score = -1;
+        //win
+        score = 1;
         break;
       case 2:
-        score = 1;
+        //loss
+        score = -1;
         break;
     }
     return score;
