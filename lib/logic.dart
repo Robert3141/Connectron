@@ -133,18 +133,100 @@ int checkWinner(List<List<int>> board, int boardSize) {
   return winnerFound;
 }
 
-List<List<int>> applyGravity(List<List<int>> board, int boardSize) {
+List<List<int>> applyGravity(List<List<int>> board, int boardSize, int x) {
   //loop through entire array except bottom line
-  for (int x = 0; x < boardSize; x++) {
-    for (int y = 0; y < boardSize - 1; y++) {
-      //if below is empty then drop down and replace
-      if (board[x][y+1] == 0) {
-        board[x][y+1] = board[x][y];
-        board[x][y] = 0;
-      }
+  for (int y = 0; y < boardSize - 1; y++) {
+    //if below is empty then drop down and replace
+    if (board[x][y+1] == 0) {
+      board[x][y+1] = board[x][y];
+      board[x][y] = 0;
     }
   }
   return board;
+}
+
+List<List<int>> boardGravity(List<List<int>> board, int boardSize, int x) {
+  //loop through entire array except bottom line
+  for (int i = 0; i < 2; i++) {
+    for (int y = boardSize-1; y > 0; y--) {
+      //if below is empty then drop down and replace
+      if (board[x][y] == 0) {
+        board[x][y] = board[x][y-1];
+        board[x][y-1] = 0;
+      }
+    }
+  }
+
+  return board;
+}
+
+List<List<int>> bombRemoval(int x, int y, List<List<int>> movedBoard) {
+  if (x>0) {
+    if (y>0) {
+      movedBoard[x-1][y-1] = 0;
+    }
+    if(y<globals.boardSize-1) {
+      movedBoard[x-1][y+1] = 0;
+    }
+    movedBoard[x-1][y] = 0;
+  }
+  if (x<globals.boardSize-1) {
+    if (y>0) {
+      movedBoard[x+1][y-1] = 0;
+    }
+    if(y<globals.boardSize-1) {
+      movedBoard[x+1][y+1] = 0;
+    }
+    movedBoard[x+1][y] = 0;
+  }
+  if (y<globals.boardSize-1) {
+    movedBoard[x][y+1] = 0;
+  }
+  movedBoard[x][y] = 0;
+
+  return movedBoard;
+}
+
+List<List<int>> playBomb(int x, List<List<int>> movedBoard) {
+  //apply gravity for bomb
+  for (int y = 0; y < globals.boardSize-1; y++) {
+    //dropdown until
+    if (movedBoard[x][y+1] == 0) {
+      //drop down below
+      movedBoard[x][y+1] = movedBoard[x][y];
+      movedBoard[x][y] = 0;
+    } else {
+      //y is bomb counter
+      print("x=$x;y=$y");
+
+      //bomb
+      movedBoard = bombRemoval(x, y, movedBoard);
+      movedBoard = boardGravity(movedBoard, globals.boardSize, x);
+      if (x > 0) {
+        //apply gravity on all tokens above
+        for (int i = 0; i < globals.boardSize-3;i++) {
+          movedBoard = boardGravity(movedBoard, globals.boardSize, x-1);
+        }
+      }
+      if (x < globals.boardSize-1) {
+        //apply gravity on all tokens above
+        for (int i = 0; i < globals.boardSize-3;i++) {
+          movedBoard = boardGravity(movedBoard, globals.boardSize, x+1);
+        }
+      }
+      return movedBoard;
+    }
+  }
+
+  movedBoard = bombRemoval(x, globals.boardSize-1, movedBoard);
+  movedBoard = boardGravity(movedBoard, globals.boardSize, x);
+  if (x > 0) {
+    movedBoard = boardGravity(movedBoard, globals.boardSize, x-1);
+  }
+  if (x < globals.boardSize-1) {
+    movedBoard = boardGravity(movedBoard, globals.boardSize, x+1);
+  }
+  return movedBoard;
 }
 
 List<List<int>> playMove(List<List<int>> board, int boardSize, int player, int columnNumber) {
@@ -153,7 +235,7 @@ List<List<int>> playMove(List<List<int>> board, int boardSize, int player, int c
 
   board[columnNumber][0] = counterAdded ? player : board[columnNumber][0];
   //msgBox(counterAdded.toString(), board[columnNumber][0].toString(), false);
-  board = applyGravity(board, boardSize);
+  board = applyGravity(board, boardSize, columnNumber);
   return board;
 }
 
@@ -195,12 +277,12 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
           }
           break;
         case 1:
-        //loss
-          score = -1 * (n) * boardSize - 1;
+        //win
+          score = 1 * (n) * boardSize;
           break;
         case 2:
-        //win
-          score = 1 * (n) * boardSize + 1;
+        //loss
+          score = -1 * (n) * boardSize;
           break;
       }
     }
@@ -208,20 +290,29 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
     //return column rather then score for first value
     if (first) {
       //first value so find optimum column
+      score = 0;
       winner = 0;
-      //find lowest value of score
-      for (int i = 0; i < boardSize; i++) {
-        winner = i;
-        score = columnScores[i];
-      }
-      //select winner for highest value
-      winner = randomNumber(0, boardSize-1);
+      //find largest value of score
       for (int i = 0; i < boardSize; i++) {
         if (columnScores[i] > score) {
+          winner = i;
+          score = columnScores[i];
+        }
+      }
+      if (score == 0) {
+        winner = randomNumber(0, boardSize-1);
+      }
+      //select winner for highest value
+      print(score);
+      print("${columnScores[0]}|${columnScores[1]}|${columnScores[2]}|${columnScores[3]}|${columnScores[4]}|${columnScores[5]}|${columnScores[6]}");
+      for (int i = 0; i < boardSize; i++) {
+        //find smallest value
+        if (columnScores[i] < score) {
           //check not going off board
           if (columnScores[i] != -1) {
             score = columnScores[i];
             winner = i;
+
           }
         }
       }
@@ -239,13 +330,16 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
     winner = checkWinner(board, boardSize);
     switch (winner) {
       case 0:
+        //draw
         score = 0;
         break;
       case 1:
-        score = -1;
+        //win
+        score = 1;
         break;
       case 2:
-        score = 1;
+        //loss
+        score = -1;
         break;
     }
     return score;
