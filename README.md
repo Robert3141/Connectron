@@ -11,7 +11,7 @@ Permissions:
 - NONE
 
 ### Download
-| [![Play Store](http://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=uk.co.ariesfamily.connectron) | [![Github](https://github.githubassets.com/pinned-octocat.svg)](https://github.com/Robert3141/Connectron/releases) | [Connectron Web](https://robert3141.github.io/#/)
+| [<img alt="Play Store" src="http://developer.android.com/images/brand/en_generic_rgb_wo_60.png" style="width:200px"/>](https://play.google.com/store/apps/details?id=uk.co.ariesfamily.connectron) |[<img alt="Github" src="https://github.githubassets.com/pinned-octocat.svg" style="width:200px"/>](https://github.com/Robert3141/Connectron/releases) | [<img alt="Connectron Web" src="https://robert3141.github.io/ic_launcher-web.png" style="width:200px"/>](https://robert3141.github.io/#/)
 | :---: | :---: | :---: |
 | Android Version (1.0+) | Github Download (1.0+) | Web Version (1.0+) |  
 
