@@ -83,8 +83,8 @@ class _GamePageState extends State<GamePage> {
     //get send port from receive port
     SendPort sendPort = await receivePort.first;
     //return the value from the isolate
-    return await sendReceive(
-        sendPort, 2*globals.recursionLimit, globals.mainBoard, globals.boardSize);
+    return await sendReceive(sendPort, 2 * globals.recursionLimit,
+        globals.mainBoard, globals.boardSize);
   }
 
   Future sendReceive(SendPort port, recursion, board, boardSize) {
@@ -124,28 +124,27 @@ class _GamePageState extends State<GamePage> {
     if (!kIsWeb) {
       columnChosen = await isolateMinMax();
     } else {
-      columnChosen = await logic.minMax(
-          2*globals.recursionLimit, globals.mainBoard, globals.boardSize, true);
+      columnChosen = await logic.minMax(2 * globals.recursionLimit,
+          globals.mainBoard, globals.boardSize, true);
     }
 
-    //run procedures
-    if (addCounter(columnChosen)) {
-      setState(() {
-        globals.mainBoard = logic.applyGravity(
-            globals.mainBoard, globals.boardSize, columnChosen);
-      });
-      //temp increase amount of players
-      winner = logic.checkWinner(globals.mainBoard, globals.boardSize);
-      if (winner == 0 && spaceOnBoard()) {
-        //next player already gonna occur
-      } else {
-        nextRound(winner);
-      }
-    } else {
-      do {
-        columnChosen = logic.randomNumber(0, globals.boardSize-1);
-      } while (!addCounter(columnChosen));
+    //add column to one that is not full
+    while (!addCounter(columnChosen)) {
+      columnChosen = logic.randomNumber(0, globals.boardSize - 1);
     }
+    //apply gravity and update UI
+    setState(() {
+      globals.mainBoard = logic.applyGravity(
+          globals.mainBoard, globals.boardSize, columnChosen);
+    });
+    //temp increase amount of players
+    winner = logic.checkWinner(globals.mainBoard, globals.boardSize);
+    if (winner == 0 && spaceOnBoard()) {
+      //next player already gonna occur
+    } else {
+      nextRound(winner);
+    }
+
     globals.amountOfPlayers = players;
   }
 

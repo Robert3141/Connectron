@@ -1,6 +1,14 @@
 library connectron.logic;
 import 'package:Connectron/globals.dart' as globals;
+import 'package:flutter/cupertino.dart';
 import 'dart:math';
+
+import 'globals.dart';
+import 'globals.dart';
+import 'globals.dart';
+import 'globals.dart';
+import 'globals.dart';
+import 'globals.dart';
 
 int randomNumber(int min, int max) {
   final random = new Random();
@@ -197,7 +205,7 @@ List<List<int>> playBomb(int x, List<List<int>> movedBoard) {
       movedBoard[x][y] = 0;
     } else {
       //y is bomb counter
-      print("x=$x;y=$y");
+      debugPrint("x=$x;y=$y");
 
       //bomb
       movedBoard = bombRemoval(x, y, movedBoard);
@@ -277,12 +285,16 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
           }
           break;
         case 1:
-        //win
-          score = 1 * (n) * boardSize;
+        //loss
+          score = n == recursionLimit
+              ?   1 * n * boardSize
+              :  -1 * n * boardSize;
           break;
         case 2:
-        //loss
-          score = -1 * (n) * boardSize;
+        //win
+          score = n == recursionLimit-1
+              ?  -1 * n * boardSize
+              :   1 * n * boardSize;
           break;
       }
     }
@@ -292,22 +304,21 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
       //first value so find optimum column
       score = 0;
       winner = 0;
-      //find largest value of score
+      //find smallest value of score
       for (int i = 0; i < boardSize; i++) {
-        if (columnScores[i] > score) {
+        if (columnScores[i] < score) {
           winner = i;
           score = columnScores[i];
         }
       }
-      if (score == 0) {
+      //if all the same choose random
+      if ((columnScores[winner] == columnScores[0] && winner != 0) || (columnScores[winner] == columnScores[1] && winner != 1)) {
         winner = randomNumber(0, boardSize-1);
       }
       //select winner for highest value
-      print(score);
-      print("${columnScores[0]}|${columnScores[1]}|${columnScores[2]}|${columnScores[3]}|${columnScores[4]}|${columnScores[5]}|${columnScores[6]}");
       for (int i = 0; i < boardSize; i++) {
-        //find smallest value
-        if (columnScores[i] < score) {
+        //find largest value
+        if (columnScores[i] > score) {
           //check not going off board
           if (columnScores[i] != -1) {
             score = columnScores[i];
@@ -316,7 +327,16 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
           }
         }
       }
+      //output to debugPrint the data from 
+      debugPrint("Largest Score=$score | minMax() Column=$winner");
+      String stringOfScores = "Scores=|";
+      for (int i = 0; i < boardSize; i++) {
+        stringOfScores+= "${columnScores[i]}|";
+      }
+      debugPrint(stringOfScores);
+      //return chosen result
       return winner;
+
     } else {
       //not the first value
       //sum up scores
@@ -325,6 +345,7 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
       }
       return score;
     }
+
   } else {
     //deepest bit of recursion
     winner = checkWinner(board, boardSize);
@@ -334,14 +355,15 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
         score = 0;
         break;
       case 1:
-        //win
-        score = 1;
-        break;
-      case 2:
         //loss
         score = -1;
         break;
+      case 2:
+        //win
+        score = 1;
+        break;
     }
+
     return score;
   }
 }
