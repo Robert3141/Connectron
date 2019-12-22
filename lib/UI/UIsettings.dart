@@ -259,8 +259,7 @@ class _SettingsState extends State<SettingsPage> {
               DynamicTheme.of(context).setBrightness(
                   Theme.of(context).brightness == Brightness.dark
                       ? Brightness.light
-                      : Brightness.dark
-              );
+                      : Brightness.dark);
             },
           ),
           IconButton(

@@ -53,7 +53,7 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       showDialog<String>(
         context: context,
-        barrierDismissible: true,
+        barrierDismissible: false,
         builder: (BuildContext context) => AlertDialog(
           title: Text(messageTitle),
           content: Text(message),
@@ -195,7 +195,6 @@ class _GamePageState extends State<GamePage> {
               globals.outputMsgOverall +
               globals.playerNames[overallWinner],
           true);
-      //user can't play anymore so running continues
     } else {
       //output winner
       msgBox(globals.outputTitleWin,
@@ -206,10 +205,9 @@ class _GamePageState extends State<GamePage> {
       globals.mainBoard = new List<List<int>>.generate(globals.boardSize,
           (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerNumber = 1;
-       //end running
-      globals.running = false;
     }
-   
+    //end running
+    globals.running = false;
   }
 
   void onColumnPressed(int columnNumber, bool bombPlayed) async {

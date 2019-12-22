@@ -1,4 +1,3 @@
-import 'package:Connectron/UI/UIhome.dart';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:Connectron/UI/UIsettings.dart';
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
             primaryColor: globals.playerColors[1],
             brightness: Brightness.dark,
           ),
-          home: HomeAppPage(title: "Main",),//TODO: set as global const
+          home: SettingsPage(title: globals.titleSettings),
         );
       },
     );
