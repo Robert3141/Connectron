@@ -286,15 +286,15 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
           break;
         case 1:
         //loss
-          score = n == recursionLimit
-              ?   1 * n * boardSize
-              :  -1 * n * boardSize;
+          columnScores[y] = n-1 == recursionLimit
+              ?  -1 * (n) * boardSize
+              :  -1 * (n~/2) * boardSize;
           break;
         case 2:
         //win
-          score = n == recursionLimit-1
-              ?  -1 * n * boardSize
-              :   1 * n * boardSize;
+          columnScores[y] = n == recursionLimit
+              ?   1 * (n) * boardSize
+              :   1 * (n~/2) * boardSize;
           break;
       }
     }
