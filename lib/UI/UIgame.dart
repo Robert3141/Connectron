@@ -49,11 +49,11 @@ class _GamePageState extends State<GamePage> {
   /// PROCEDURES
   ///
 
-  void msgBox(String messageTitle, String message, bool pop) {
+  void msgBox(String messageTitle, String message, bool pop, bool dismiss) {
     setState(() {
       showDialog<String>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: dismiss,
         builder: (BuildContext context) => AlertDialog(
           title: Text(messageTitle),
           content: Text(message),
@@ -116,17 +116,20 @@ class _GamePageState extends State<GamePage> {
     int players = globals.amountOfPlayers;
     globals.amountOfPlayers = 2;
     int winner = 0;
-    int columnChosen = 0;
+    int columnChosen = logic.randomNumber(0, globals.boardSize - 1);;
 
     //choose column
     //Web doesn't support isolates
     //run in isolate to stop main thread being cluttered so UI can still update
-    if (!kIsWeb) {
-      columnChosen = await isolateMinMax();
-    } else {
-      columnChosen = await logic.minMax(2 * globals.recursionLimit,
-          globals.mainBoard, globals.boardSize, true);
+    if (globals.recursionLimit != 0) {
+      if (!kIsWeb) {
+        columnChosen = await isolateMinMax();
+      } else {
+        columnChosen = await logic.minMax(2 * globals.recursionLimit,
+            globals.mainBoard, globals.boardSize, true);
+      }
     }
+
 
     //add column to one that is not full
     while (!addCounter(columnChosen)) {
@@ -193,20 +196,21 @@ class _GamePageState extends State<GamePage> {
               globals.playerNames[winnerNumber] +
               globals.outputMsgOverall +
               globals.playerNames[overallWinner],
-          true);
+          true, true);
+      globals.running = true;
     } else {
       //output winner
       msgBox(globals.outputTitleWin,
-          globals.outputMsgWinner + globals.playerNames[winnerNumber], false);
+          globals.outputMsgWinner + globals.playerNames[winnerNumber], false, true);
       //reset variables
       globals.playerBombs =
           new List<bool>.generate(globals.amountOfPlayers, (i) => false);
       globals.mainBoard = new List<List<int>>.generate(globals.boardSize,
           (i) => List<int>.generate(globals.boardSize, (j) => 0));
       globals.playerNumber = 1;
+      //end running
+      globals.running = false;
     }
-    //end running
-    globals.running = false;
   }
 
   void onColumnPressed(int columnNumber, bool bombPlayed) async {
@@ -236,12 +240,12 @@ class _GamePageState extends State<GamePage> {
             nextRound(winner);
           }
         } else {
-          msgBox(globals.errorTitleInput, globals.outputMsgBoardNoSpace, false);
+          msgBox(globals.errorTitleInput, globals.outputMsgBoardNoSpace, false, true);
           globals.running = false;
         }
       }
     } catch (e) {
-      msgBox(globals.errorTitleError, e.toString(), false);
+      msgBox(globals.errorTitleError, e.toString(), false, true);
     }
   }
 
@@ -281,7 +285,7 @@ class _GamePageState extends State<GamePage> {
           IconButton(
             icon: Icon(Icons.help),
             onPressed: () {
-              msgBox(globals.helpTitleHelp, globals.helpMsgHelpGame, false);
+              msgBox(globals.helpTitleHelp, globals.helpMsgHelpGame, false, true);
             },
           )
         ],

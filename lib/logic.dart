@@ -3,13 +3,6 @@ import 'package:Connectron/globals.dart' as globals;
 import 'package:flutter/cupertino.dart';
 import 'dart:math';
 
-import 'globals.dart';
-import 'globals.dart';
-import 'globals.dart';
-import 'globals.dart';
-import 'globals.dart';
-import 'globals.dart';
-
 int randomNumber(int min, int max) {
   final random = new Random();
   return min + random.nextInt(max-min);
@@ -286,15 +279,15 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first) asyn
           break;
         case 1:
         //loss
-          score = n == recursionLimit
-              ?   1 * n * boardSize
-              :  -1 * n * boardSize;
+          columnScores[y] = n-1 == globals.recursionLimit
+              ?  -1 * (n) * boardSize
+              :  -1 * (n~/2) * boardSize;
           break;
         case 2:
         //win
-          score = n == recursionLimit-1
-              ?  -1 * n * boardSize
-              :   1 * n * boardSize;
+          columnScores[y] = n == globals.recursionLimit
+              ?   1 * (n) * boardSize
+              :   1 * (n~/2) * boardSize;
           break;
       }
     }
