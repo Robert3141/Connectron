@@ -1,0 +1,21 @@
+name: connectron
+version: 3.2.1
+summary: A simple 4 in a row style game
+description: The game has features including; Simple Material UI, Large Customization e.g board size, line length etc, 1 player move that analyses future moves, No ads!
+
+confinement: strict
+base: core18
+grade: stable
+
+apps:
+  connectron:
+    command: Connectron
+    extensions: [flutter-dev] 
+    plugs:
+      - network #because flutter.dev said so ?
+
+parts:
+  connectron:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart #main entry point of the program
