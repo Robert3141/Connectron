@@ -10,7 +10,7 @@ grade: stable
 apps:
   connectron:
     command: Connectron
-    extensions: [flutter-dev] 
+    extensions: [flutter-master] 
     plugs:
       - network #because flutter.dev said so ?
 
