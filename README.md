@@ -11,9 +11,9 @@ Permissions:
 - NONE
 
 ### Download
-| [<img alt="Play Store" src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" style="width:100px"/>](https://play.google.com/store/apps/details?id=uk.co.ariesfamily.connectron) |[<img alt="Github" src="https://github.githubassets.com/pinned-octocat.svg" style="width:100px"/>](https://github.com/Robert3141/Connectron/releases) | [<img alt="Connectron Web" src="https://robert3141.github.io/Connectron/ic_launcher-web.png" style="width:100px"/>](https://robert3141.github.io/Connectron/#/) | [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/connectron) |
-| :---: | :---: | :---: | :---: |
-| Android Version (1.0+) | Github Download (1.0+) | Web Version (1.0+) |  Snap store Version (3.2.1+) |
+| [<img alt="Play Store" src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" style="width:100px"/>](https://play.google.com/store/apps/details?id=uk.co.ariesfamily.connectron) |[<img alt="Github" src="https://github.githubassets.com/pinned-octocat.svg" style="width:100px"/>](https://github.com/Robert3141/Connectron/releases) | [<img alt="Web" src="https://3u26hb1g25wn1xwo8g186fnd-wpengine.netdna-ssl.com/files/2019/10/Fx-Browser-icon-fullColor.svg" style="width:100px"/>](https://robert3141.github.io/Connectron/#/) | [<img alt="Snap" src="https://snapcraft.io/static/images/badges/en/snap-store-black.svg" style="width:100px"/>](https://snapcraft.io/connectron) | [<img alt="Windows" src="https://static.wikia.nocookie.net/logopedia/images/8/86/Windows_%282020%29.svg/revision/latest/scale-to-width-down/200?cb=20200321100510" style="width:100px"/>](https://github.com/Robert3141/Connectron/releases) |
+| :---: | :---: | :---: | :---: | :---: |
+| Android Version (1.0+) | Github Download (1.0+) | Web Version (1.0+) |  Snap store Version (3.2.1+) | Windows Version (3.2.2+) |
 
 ### Contribute
 You can contribute to this project in many ways:
