@@ -1,4 +1,5 @@
 import 'package:Connectron/globals.dart' as globals;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Connectron/UI/UIsettings.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
@@ -7,7 +8,9 @@ import 'package:desktop_window/desktop_window.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  if (kIsWeb
+      ? false
+      : Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     //await DesktopWindow.setMaxWindowSize(Size.infinite);
     await DesktopWindow.setMinWindowSize(Size(400, 500));
   }
