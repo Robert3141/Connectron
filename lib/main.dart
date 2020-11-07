@@ -2,8 +2,17 @@ import 'package:Connectron/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:Connectron/UI/UIsettings.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'dart:io';
+import 'package:desktop_window/desktop_window.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    //await DesktopWindow.setMaxWindowSize(Size.infinite);
+    await DesktopWindow.setMinWindowSize(Size(400, 500));
+  }
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

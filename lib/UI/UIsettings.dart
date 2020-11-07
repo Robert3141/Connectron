@@ -4,7 +4,6 @@ import 'package:Connectron/globals.dart' as globals;
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tinycolor/tinycolor.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key key, this.title}) : super(key: key);
@@ -185,12 +184,10 @@ class _SettingsState extends State<SettingsPage> {
       //board
       String _boardString =
           globals.conBoardSize.text ?? globals.boardDefault.toString();
-      globals.boardSize = int.parse(_boardString == ""
-          ? globals.boardDefault.toString()
-          : _boardString);
+      globals.boardSize = int.parse(
+          _boardString == "" ? globals.boardDefault.toString() : _boardString);
       //player amount
-      String _playerString = globals
-          .conAmountOfPlayers.text;
+      String _playerString = globals.conAmountOfPlayers.text;
       globals.amountOfPlayers = int.parse(_playerString == ""
           ? globals.playerDefault.toString()
           : _playerString);
@@ -292,10 +289,11 @@ class _SettingsState extends State<SettingsPage> {
                           child: Align(
                             alignment: AlignmentDirectional.center,
                             child: DropdownButton<String>(
-                              value: globals
-                                  .optionalPresetsTitles[globals.selectedPreset],
+                              value: globals.optionalPresetsTitles[
+                                  globals.selectedPreset],
                               items: globals.optionalPresetsTitles
-                                  .map<DropdownMenuItem<String>>((String value) {
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(
@@ -307,13 +305,15 @@ class _SettingsState extends State<SettingsPage> {
                               icon: Icon(Icons.arrow_downward),
                               onChanged: onLblPresetsPressed,
                               underline: Container(
-                                  height: 2, color: Theme.of(context).primaryColor),
+                                  height: 2,
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                         ),
                         IconButton(
-                          onPressed: (){
-                            msgBox(globals.helpTitleHelp, globals.helpOptionalPresets);
+                          onPressed: () {
+                            msgBox(globals.helpTitleHelp,
+                                globals.helpOptionalPresets);
                           },
                           icon: Icon(Icons.help),
                         ),
@@ -324,76 +324,79 @@ class _SettingsState extends State<SettingsPage> {
                   //Either display bomb counter toggle or display CPU level
                   !globals.recursionEnabled
                       ? InkWell(
-                    enableFeedback: globals.recursionEnabled,
-                    splashColor: Theme.of(context).primaryColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            globals.lblBombCounter,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Expanded(
-                          child: Align(
-                            alignment: AlignmentDirectional.center,
-                            child: InkWell(
-                              onTap: () {
-                                onLblBombPressed(!globals.bombCounter);
-                              },
-                              child: Switch(
-                                value: globals.bombCounter,
-                                onChanged: onLblBombPressed,
+                          enableFeedback: globals.recursionEnabled,
+                          splashColor: Theme.of(context).primaryColor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  globals.lblBombCounter,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: (){
-                            msgBox(globals.helpTitleHelp, globals.helpBombCounter);
-                          },
-                          icon: Icon(Icons.help),
-                        ),
-                      ],
-                    ),
-                  )
-                      : InkWell(
-                    enableFeedback: globals.recursionEnabled,
-                    splashColor: Theme.of(context).primaryColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            globals.lblRecursion,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Expanded(
-                          child: TextField(
-                            controller: globals.conRecursion,
-                            enabled: globals.recursionEnabled,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              WhitelistingTextInputFormatter.digitsOnly
+                              Expanded(
+                                child: Align(
+                                  alignment: AlignmentDirectional.center,
+                                  child: InkWell(
+                                    onTap: () {
+                                      onLblBombPressed(!globals.bombCounter);
+                                    },
+                                    child: Switch(
+                                      value: globals.bombCounter,
+                                      onChanged: onLblBombPressed,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  msgBox(globals.helpTitleHelp,
+                                      globals.helpBombCounter);
+                                },
+                                icon: Icon(Icons.help),
+                              ),
                             ],
-                            onChanged: onLblRecursionPressed,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                                hintText: globals.recursionDefault.toString(),
-                                border: OutlineInputBorder()),
+                          ),
+                        )
+                      : InkWell(
+                          enableFeedback: globals.recursionEnabled,
+                          splashColor: Theme.of(context).primaryColor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  globals.lblRecursion,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Expanded(
+                                child: TextField(
+                                  controller: globals.conRecursion,
+                                  enabled: globals.recursionEnabled,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  onChanged: onLblRecursionPressed,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                      hintText:
+                                          globals.recursionDefault.toString(),
+                                      border: OutlineInputBorder()),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  msgBox(globals.helpTitleHelp,
+                                      globals.helpRecursion);
+                                },
+                                icon: Icon(Icons.help),
+                              ),
+                            ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: (){
-                            msgBox(globals.helpTitleHelp, globals.helpRecursion);
-                          },
-                          icon: Icon(Icons.help),
-                        ),
-                      ],
-                    ),
-                  ),
                   Divider(),
                   ExpansionTile(
                     title: Text(globals.lblFineTuning),
@@ -404,15 +407,15 @@ class _SettingsState extends State<SettingsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Expanded(
-                              child:
-                              Text(globals.lblBoardSize, textAlign: TextAlign.center),
+                              child: Text(globals.lblBoardSize,
+                                  textAlign: TextAlign.center),
                             ),
                             Expanded(
                               child: TextField(
                                 controller: globals.conBoardSize,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
-                                  WhitelistingTextInputFormatter.digitsOnly
+                                  FilteringTextInputFormatter.digitsOnly
                                 ],
                                 onChanged: onLblBoardSizePressed,
                                 textAlign: TextAlign.center,
@@ -422,8 +425,9 @@ class _SettingsState extends State<SettingsPage> {
                               ),
                             ),
                             IconButton(
-                              onPressed: (){
-                                msgBox(globals.helpTitleHelp, globals.helpBoardSize);
+                              onPressed: () {
+                                msgBox(globals.helpTitleHelp,
+                                    globals.helpBoardSize);
                               },
                               icon: Icon(Icons.help),
                             ),
@@ -447,7 +451,7 @@ class _SettingsState extends State<SettingsPage> {
                                 controller: globals.conAmountOfPlayers,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
-                                  WhitelistingTextInputFormatter.digitsOnly
+                                  FilteringTextInputFormatter.digitsOnly
                                 ],
                                 onChanged: onLblPlayerAmountPressed,
                                 textAlign: TextAlign.center,
@@ -457,8 +461,9 @@ class _SettingsState extends State<SettingsPage> {
                               ),
                             ),
                             IconButton(
-                              onPressed: (){
-                                msgBox(globals.helpTitleHelp, globals.helpAmountOfPlayers);
+                              onPressed: () {
+                                msgBox(globals.helpTitleHelp,
+                                    globals.helpAmountOfPlayers);
                               },
                               icon: Icon(Icons.help),
                             ),
@@ -482,7 +487,7 @@ class _SettingsState extends State<SettingsPage> {
                                 controller: globals.conLineLength,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
-                                  WhitelistingTextInputFormatter.digitsOnly
+                                  FilteringTextInputFormatter.digitsOnly
                                 ],
                                 onChanged: onLblLineLengthPressed,
                                 textAlign: TextAlign.center,
@@ -492,8 +497,9 @@ class _SettingsState extends State<SettingsPage> {
                               ),
                             ),
                             IconButton(
-                              onPressed: (){
-                                msgBox(globals.helpTitleHelp, globals.helpLineLength);
+                              onPressed: () {
+                                msgBox(globals.helpTitleHelp,
+                                    globals.helpLineLength);
                               },
                               icon: Icon(Icons.help),
                             ),
@@ -517,7 +523,7 @@ class _SettingsState extends State<SettingsPage> {
                                 controller: globals.conNumberOfRounds,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
-                                  WhitelistingTextInputFormatter.digitsOnly
+                                  FilteringTextInputFormatter.digitsOnly
                                 ],
                                 onChanged: onLblRoundAmountPressed,
                                 textAlign: TextAlign.center,
@@ -527,8 +533,9 @@ class _SettingsState extends State<SettingsPage> {
                               ),
                             ),
                             IconButton(
-                              onPressed: (){
-                                msgBox(globals.helpTitleHelp, globals.helpRoundNum);
+                              onPressed: () {
+                                msgBox(globals.helpTitleHelp,
+                                    globals.helpRoundNum);
                               },
                               icon: Icon(Icons.help),
                             ),
@@ -537,13 +544,13 @@ class _SettingsState extends State<SettingsPage> {
                       ),
                     ],
                   ),
-
                 ],
               ),
             ),
             Divider(),
             Container(
-              padding: EdgeInsets.only(left: globals.defaultPadding, right: globals.defaultPadding),
+              padding: EdgeInsets.only(
+                  left: globals.defaultPadding, right: globals.defaultPadding),
               width: double.infinity,
               child: RaisedButton(
                 child: Text(globals.lblRunGame),
@@ -552,6 +559,9 @@ class _SettingsState extends State<SettingsPage> {
                 onPressed: onBtnRunGamePressed,
               ),
             ),
+            Container(
+              height: 10,
+            )
           ],
         ),
       ),

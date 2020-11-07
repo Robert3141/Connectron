@@ -116,7 +116,8 @@ class _GamePageState extends State<GamePage> {
     int players = globals.amountOfPlayers;
     globals.amountOfPlayers = 2;
     int winner = 0;
-    int columnChosen = logic.randomNumber(0, globals.boardSize - 1);;
+    int columnChosen = logic.randomNumber(0, globals.boardSize - 1);
+    ;
 
     //choose column
     //Web doesn't support isolates
@@ -129,7 +130,6 @@ class _GamePageState extends State<GamePage> {
             globals.mainBoard, globals.boardSize, true);
       }
     }
-
 
     //add column to one that is not full
     while (!addCounter(columnChosen)) {
@@ -196,12 +196,16 @@ class _GamePageState extends State<GamePage> {
               globals.playerNames[winnerNumber] +
               globals.outputMsgOverall +
               globals.playerNames[overallWinner],
-          true, true);
+          true,
+          true);
       globals.running = true;
     } else {
       //output winner
-      msgBox(globals.outputTitleWin,
-          globals.outputMsgWinner + globals.playerNames[winnerNumber], false, true);
+      msgBox(
+          globals.outputTitleWin,
+          globals.outputMsgWinner + globals.playerNames[winnerNumber],
+          false,
+          true);
       //reset variables
       globals.playerBombs =
           new List<bool>.generate(globals.amountOfPlayers, (i) => false);
@@ -240,7 +244,8 @@ class _GamePageState extends State<GamePage> {
             nextRound(winner);
           }
         } else {
-          msgBox(globals.errorTitleInput, globals.outputMsgBoardNoSpace, false, true);
+          msgBox(globals.errorTitleInput, globals.outputMsgBoardNoSpace, false,
+              true);
           globals.running = false;
         }
       }
@@ -285,7 +290,8 @@ class _GamePageState extends State<GamePage> {
           IconButton(
             icon: Icon(Icons.help),
             onPressed: () {
-              msgBox(globals.helpTitleHelp, globals.helpMsgHelpGame, false, true);
+              msgBox(
+                  globals.helpTitleHelp, globals.helpMsgHelpGame, false, true);
             },
           )
         ],
