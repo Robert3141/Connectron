@@ -1,4 +1,3 @@
-import 'dart:isolate';
 import 'package:tinycolor/tinycolor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -103,7 +102,8 @@ class _GamePageState extends State<GamePage> {
           globals.mainBoard, globals.boardSize, columnChosen);
     });
     //temp increase amount of players
-    winner = logic.checkWinner(globals.mainBoard, globals.boardSize);
+    winner =
+        logic.checkWinner(globals.mainBoard, globals.boardSize, columnChosen);
     if (winner == 0 && spaceOnBoard()) {
       //next player already gonna occur
     } else {
@@ -199,7 +199,8 @@ class _GamePageState extends State<GamePage> {
                   globals.mainBoard, globals.boardSize, columnNumber);
             }
           });
-          winner = logic.checkWinner(globals.mainBoard, globals.boardSize);
+          winner = logic.checkWinner(
+              globals.mainBoard, globals.boardSize, columnNumber);
           if (winner == 0 && spaceOnBoard()) {
             await nextPlayer();
           } else {

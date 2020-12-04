@@ -1,11 +1,9 @@
 library connectron.logic;
 
-import 'package:Connectron/UI/UIgame.dart';
 import 'dart:isolate';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:flutter/cupertino.dart';
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 
 int randomNumber(int min, int max) {
@@ -13,15 +11,27 @@ int randomNumber(int min, int max) {
   return min + random.nextInt(max - min);
 }
 
-int checkHor(List<List<int>> board, int boardSize) {
+int checkHor(List<List<int>> board, int boardSize, int column) {
   int winningPlayer = 0;
   int amountFound = 0;
+  int minX = column == null
+      ? 0
+      : column - globals.lineLength + 1 > 0
+          ? column - globals.lineLength + 1
+          : 0;
+  int maxX = column == null
+      ? boardSize - globals.lineLength
+      : column + globals.lineLength < boardSize - globals.lineLength
+          ? column + globals.lineLength
+          : boardSize - globals.lineLength;
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
     //check every y
     for (int y = 0; y < boardSize; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = minX /*0*/;
+          x <= maxX /*boardSize - globals.lineLength*/;
+          x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -40,13 +50,16 @@ int checkHor(List<List<int>> board, int boardSize) {
   return winningPlayer;
 }
 
-int checkVer(List<List<int>> board, int boardSize) {
+int checkVer(List<List<int>> board, int boardSize, int column) {
   int winningPlayer = 0;
   int amountFound = 0;
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
-    //check every x
-    for (int x = 0; x < boardSize; x++) {
+    //check only the column
+    for (int x = column ?? 0;
+        column == null ? column == x : x < boardSize;
+        x++) {
+      print(x);
       //check for every y
       for (int y = 0; y <= boardSize - globals.lineLength; y++) {
         //check for in line
@@ -67,15 +80,26 @@ int checkVer(List<List<int>> board, int boardSize) {
   return winningPlayer;
 }
 
-int checkDiRight(List<List<int>> board, int boardSize) {
+int checkDiRight(List<List<int>> board, int boardSize, int column) {
   int winningPlayer = 0;
   int amountFound = 0;
+  int minX = column == null
+      ? 0
+      : column - globals.lineLength + 1 > 0
+          ? column - globals.lineLength + 1
+          : 0;
+  int maxX = column == null
+      ? boardSize - globals.lineLength
+      : column + globals.lineLength < boardSize - globals.lineLength
+          ? column + globals.lineLength
+          : boardSize - globals.lineLength;
+
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
     //check every y
     for (int y = 0; y <= boardSize - globals.lineLength; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = minX; x <= maxX; x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -94,15 +118,26 @@ int checkDiRight(List<List<int>> board, int boardSize) {
   return winningPlayer;
 }
 
-int checkDiLeft(List<List<int>> board, int boardSize) {
+int checkDiLeft(List<List<int>> board, int boardSize, int column) {
   int winningPlayer = 0;
   int amountFound = 0;
+  int minX = column == null
+      ? 0
+      : column - globals.lineLength + 1 > 0
+          ? column - globals.lineLength + 1
+          : 0;
+  int maxX = column == null
+      ? boardSize - globals.lineLength
+      : column + globals.lineLength < boardSize - globals.lineLength
+          ? column + globals.lineLength
+          : boardSize - globals.lineLength;
+
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
     //check every y
     for (int y = globals.lineLength - 1; y < boardSize; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = minX; x <= maxX; x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -121,12 +156,12 @@ int checkDiLeft(List<List<int>> board, int boardSize) {
   return winningPlayer;
 }
 
-int checkWinner(List<List<int>> board, int boardSize) {
+int checkWinner(List<List<int>> board, int boardSize, [int placed]) {
   int winnerFound = 0;
-  int horizontal = checkHor(board, boardSize);
-  int vertical = checkVer(board, boardSize);
-  int diagonalRight = checkDiRight(board, boardSize);
-  int diagonalLeft = checkDiLeft(board, boardSize);
+  int horizontal = checkHor(board, boardSize, placed);
+  int vertical = checkVer(board, boardSize, placed);
+  int diagonalRight = checkDiRight(board, boardSize, placed);
+  int diagonalLeft = checkDiLeft(board, boardSize, placed);
   if (horizontal != 0) {
     winnerFound = horizontal;
   } else if (vertical != 0) {
@@ -274,7 +309,7 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first,
         newBoard = playMove(newBoard, boardSize, 1, y);
       }
       //check for winner
-      winner = checkWinner(board, boardSize);
+      winner = checkWinner(board, boardSize, y);
       switch (winner) {
         case 0:
           //still no winner yet
