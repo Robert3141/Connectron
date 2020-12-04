@@ -1,8 +1,12 @@
 library connectron.logic;
 
+import 'package:Connectron/UI/UIgame.dart';
+import 'dart:isolate';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:flutter/cupertino.dart';
 import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 
 int randomNumber(int min, int max) {
   final random = new Random();
@@ -244,7 +248,7 @@ List<List<int>> playMove(
 }
 
 Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first,
-    {bool debug = false}) async {
+    {bool debug = kDebugMode}) async {
   //local vars
   List<int> columnScores = new List<int>.generate(boardSize, (i) => 0);
   List<List<int>> newBoard =
@@ -361,5 +365,46 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first,
     }
 
     return score;
+  }
+}
+
+//code stolen from https://flutter.dev/docs/get-started/flutter-for/android-devs#how-do-you-move-work-to-a-background-thread
+//create isolate and return value when done
+Future<int> isolateMinMax(int n, List<List<int>> board, int boardSize,
+    [bool first = false]) async {
+  //print("new iso n=$n");
+  //create new receive port
+  ReceivePort receivePort = ReceivePort();
+  //spawn in isolate with this receive port
+  await Isolate.spawn(dataLoader, receivePort.sendPort);
+  //get send port from receive port
+  SendPort sendPort = await receivePort.first;
+  //return the value from the isolate
+  return await sendReceive(sendPort, n, board, boardSize, first);
+}
+
+Future sendReceive(SendPort port, int recursion, List<List<int>> board,
+    int boardSize, bool first) {
+  ReceivePort receivePort = ReceivePort();
+  //send data in port into isolate
+  port.send([receivePort.sendPort, recursion, board, boardSize, first]);
+  return receivePort.first;
+}
+
+//the actual isolate routine
+Future dataLoader(SendPort sendPort) async {
+  //get the port of the isolate
+  ReceivePort port = ReceivePort();
+  //tell other isolates this is listening on this send port
+  sendPort.send(port.sendPort);
+  //get data from port
+  await for (var msg in port) {
+    //get send port for return of data
+    SendPort sendPort = msg[0];
+    //get result from minMax fun and give it data from receive port message
+    int result = await minMax(msg[1], msg[2], msg[3], msg[4]);
+    //return the result from the isolate
+    //print("$result $msg");
+    sendPort.send(result);
   }
 }

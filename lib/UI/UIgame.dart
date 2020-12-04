@@ -73,58 +73,20 @@ class _GamePageState extends State<GamePage> {
     });
   }
 
-  //code stolen from https://flutter.dev/docs/get-started/flutter-for/android-devs#how-do-you-move-work-to-a-background-thread
-  //create isolate and return value when done
-  Future isolateMinMax() async {
-    //create new receive port
-    ReceivePort receivePort = ReceivePort();
-    //spawn in isolate with this receive port
-    await Isolate.spawn(dataLoader, receivePort.sendPort);
-    //get send port from receive port
-    SendPort sendPort = await receivePort.first;
-    //return the value from the isolate
-    return await sendReceive(sendPort, 2 * globals.recursionLimit,
-        globals.mainBoard, globals.boardSize);
-  }
-
-  Future sendReceive(SendPort port, recursion, board, boardSize) {
-    ReceivePort receivePort = ReceivePort();
-    //send data in port into isolate
-    port.send([receivePort.sendPort, recursion, board, boardSize]);
-    return receivePort.first;
-  }
-
-  //the actual isolate routine
-  static dataLoader(SendPort sendPort) async {
-    //get the port of the isolate
-    ReceivePort port = ReceivePort();
-    //tell other isolates this is listening on this send port
-    sendPort.send(port.sendPort);
-    //get data from port
-    await for (var msg in port) {
-      //get send port for return of data
-      SendPort sendPort = msg[0];
-      //get result from minMax fun and give it data from receive port message
-      int result = await logic.minMax(msg[1], msg[2], msg[3], true);
-      //return the result from the isolate
-      sendPort.send(result);
-    }
-  }
-
   Future runAI() async {
     //local vars
     int players = globals.amountOfPlayers;
     globals.amountOfPlayers = 2;
     int winner = 0;
     int columnChosen = logic.randomNumber(0, globals.boardSize - 1);
-    ;
 
     //choose column
     //Web doesn't support isolates
     //run in isolate to stop main thread being cluttered so UI can still update
     if (globals.recursionLimit != 0) {
       if (!kIsWeb) {
-        columnChosen = await isolateMinMax();
+        columnChosen = await logic.isolateMinMax(2 * globals.recursionLimit,
+            globals.mainBoard, globals.boardSize, true);
       } else {
         columnChosen = await logic.minMax(2 * globals.recursionLimit,
             globals.mainBoard, globals.boardSize, true);
