@@ -238,12 +238,13 @@ class _GamePageState extends State<GamePage> {
   Widget build(BuildContext context) {
     //local variables of size
     double _paddingInsets = globals.defaultPadding / globals.boardSize;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double smallestLength = width > height ? height : width;
     double _counterSize =
-        (MediaQuery.of(context).size.width - globals.defaultPadding) /
-            (globals.boardSize + 1);
+        (smallestLength - globals.defaultPadding) / (globals.boardSize + 2);
     double _counterRadius =
-        (MediaQuery.of(context).size.width / 2 - globals.defaultPadding) /
-            (globals.boardSize + 1);
+        (smallestLength / 2 - globals.defaultPadding) / (globals.boardSize + 2);
 
     return Scaffold(
       backgroundColor: chooseBackgroundColor(),
