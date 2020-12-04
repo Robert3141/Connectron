@@ -59,7 +59,6 @@ int checkVer(List<List<int>> board, int boardSize, int column) {
     for (int x = column ?? 0;
         column == null ? column == x : x < boardSize;
         x++) {
-      print(x);
       //check for every y
       for (int y = 0; y <= boardSize - globals.lineLength; y++) {
         //check for in line
@@ -407,7 +406,6 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first,
 //create isolate and return value when done
 Future<int> isolateMinMax(int n, List<List<int>> board, int boardSize,
     [bool first = false]) async {
-  //print("new iso n=$n");
   //create new receive port
   ReceivePort receivePort = ReceivePort();
   //spawn in isolate with this receive port
@@ -439,7 +437,6 @@ Future dataLoader(SendPort sendPort) async {
     //get result from minMax fun and give it data from receive port message
     int result = await minMax(msg[1], msg[2], msg[3], msg[4]);
     //return the result from the isolate
-    //print("$result $msg");
     sendPort.send(result);
   }
 }
