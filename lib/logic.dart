@@ -1,23 +1,37 @@
 library connectron.logic;
 
+import 'dart:isolate';
 import 'package:Connectron/globals.dart' as globals;
 import 'package:flutter/cupertino.dart';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 
 int randomNumber(int min, int max) {
   final random = new Random();
   return min + random.nextInt(max - min);
 }
 
-int checkHor(List<List<int>> board, int boardSize) {
+int checkHor(List<List<int>> board, int boardSize, int column) {
   int winningPlayer = 0;
   int amountFound = 0;
+  int minX = column == null
+      ? 0
+      : column - globals.lineLength + 1 > 0
+          ? column - globals.lineLength + 1
+          : 0;
+  int maxX = column == null
+      ? boardSize - globals.lineLength
+      : column + globals.lineLength < boardSize - globals.lineLength
+          ? column + globals.lineLength
+          : boardSize - globals.lineLength;
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
     //check every y
     for (int y = 0; y < boardSize; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = minX /*0*/;
+          x <= maxX /*boardSize - globals.lineLength*/;
+          x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -36,13 +50,15 @@ int checkHor(List<List<int>> board, int boardSize) {
   return winningPlayer;
 }
 
-int checkVer(List<List<int>> board, int boardSize) {
+int checkVer(List<List<int>> board, int boardSize, int column) {
   int winningPlayer = 0;
   int amountFound = 0;
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
-    //check every x
-    for (int x = 0; x < boardSize; x++) {
+    //check only the column
+    for (int x = column ?? 0;
+        column == null ? column == x : x < boardSize;
+        x++) {
       //check for every y
       for (int y = 0; y <= boardSize - globals.lineLength; y++) {
         //check for in line
@@ -63,15 +79,26 @@ int checkVer(List<List<int>> board, int boardSize) {
   return winningPlayer;
 }
 
-int checkDiRight(List<List<int>> board, int boardSize) {
+int checkDiRight(List<List<int>> board, int boardSize, int column) {
   int winningPlayer = 0;
   int amountFound = 0;
+  int minX = column == null
+      ? 0
+      : column - globals.lineLength + 1 > 0
+          ? column - globals.lineLength + 1
+          : 0;
+  int maxX = column == null
+      ? boardSize - globals.lineLength
+      : column + globals.lineLength < boardSize - globals.lineLength
+          ? column + globals.lineLength
+          : boardSize - globals.lineLength;
+
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
     //check every y
     for (int y = 0; y <= boardSize - globals.lineLength; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = minX; x <= maxX; x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -90,15 +117,26 @@ int checkDiRight(List<List<int>> board, int boardSize) {
   return winningPlayer;
 }
 
-int checkDiLeft(List<List<int>> board, int boardSize) {
+int checkDiLeft(List<List<int>> board, int boardSize, int column) {
   int winningPlayer = 0;
   int amountFound = 0;
+  int minX = column == null
+      ? 0
+      : column - globals.lineLength + 1 > 0
+          ? column - globals.lineLength + 1
+          : 0;
+  int maxX = column == null
+      ? boardSize - globals.lineLength
+      : column + globals.lineLength < boardSize - globals.lineLength
+          ? column + globals.lineLength
+          : boardSize - globals.lineLength;
+
   //loop for every player
   for (int i = 1; i <= globals.amountOfPlayers; i++) {
     //check every y
     for (int y = globals.lineLength - 1; y < boardSize; y++) {
       //check for every x
-      for (int x = 0; x <= boardSize - globals.lineLength; x++) {
+      for (int x = minX; x <= maxX; x++) {
         //check for in line
         amountFound = 0;
         for (int n = 0; n < globals.lineLength; n++) {
@@ -117,12 +155,12 @@ int checkDiLeft(List<List<int>> board, int boardSize) {
   return winningPlayer;
 }
 
-int checkWinner(List<List<int>> board, int boardSize) {
+int checkWinner(List<List<int>> board, int boardSize, [int placed]) {
   int winnerFound = 0;
-  int horizontal = checkHor(board, boardSize);
-  int vertical = checkVer(board, boardSize);
-  int diagonalRight = checkDiRight(board, boardSize);
-  int diagonalLeft = checkDiLeft(board, boardSize);
+  int horizontal = checkHor(board, boardSize, placed);
+  int vertical = checkVer(board, boardSize, placed);
+  int diagonalRight = checkDiRight(board, boardSize, placed);
+  int diagonalLeft = checkDiLeft(board, boardSize, placed);
   if (horizontal != 0) {
     winnerFound = horizontal;
   } else if (vertical != 0) {
@@ -244,7 +282,7 @@ List<List<int>> playMove(
 }
 
 Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first,
-    {bool debug = false}) async {
+    {bool debug = kDebugMode}) async {
   //local vars
   List<int> columnScores = new List<int>.generate(boardSize, (i) => 0);
   List<List<int>> newBoard =
@@ -270,7 +308,7 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first,
         newBoard = playMove(newBoard, boardSize, 1, y);
       }
       //check for winner
-      winner = checkWinner(board, boardSize);
+      winner = checkWinner(board, boardSize, y);
       switch (winner) {
         case 0:
           //still no winner yet
@@ -361,5 +399,44 @@ Future<int> minMax(int n, List<List<int>> board, int boardSize, bool first,
     }
 
     return score;
+  }
+}
+
+//code stolen from https://flutter.dev/docs/get-started/flutter-for/android-devs#how-do-you-move-work-to-a-background-thread
+//create isolate and return value when done
+Future<int> isolateMinMax(int n, List<List<int>> board, int boardSize,
+    [bool first = false]) async {
+  //create new receive port
+  ReceivePort receivePort = ReceivePort();
+  //spawn in isolate with this receive port
+  await Isolate.spawn(dataLoader, receivePort.sendPort);
+  //get send port from receive port
+  SendPort sendPort = await receivePort.first;
+  //return the value from the isolate
+  return await sendReceive(sendPort, n, board, boardSize, first);
+}
+
+Future sendReceive(SendPort port, int recursion, List<List<int>> board,
+    int boardSize, bool first) {
+  ReceivePort receivePort = ReceivePort();
+  //send data in port into isolate
+  port.send([receivePort.sendPort, recursion, board, boardSize, first]);
+  return receivePort.first;
+}
+
+//the actual isolate routine
+Future dataLoader(SendPort sendPort) async {
+  //get the port of the isolate
+  ReceivePort port = ReceivePort();
+  //tell other isolates this is listening on this send port
+  sendPort.send(port.sendPort);
+  //get data from port
+  await for (var msg in port) {
+    //get send port for return of data
+    SendPort sendPort = msg[0];
+    //get result from minMax fun and give it data from receive port message
+    int result = await minMax(msg[1], msg[2], msg[3], msg[4]);
+    //return the result from the isolate
+    sendPort.send(result);
   }
 }
